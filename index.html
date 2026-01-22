@@ -107,53 +107,101 @@
               </div>
             </section>
 
-            {/* ================= CAPITAL FLYWHEEL ================= */}
-            <section className="bg-white rounded-[2.5rem] shadow-2xl p-12 border">
-              <h2 className="text-2xl font-black text-center mb-4 uppercase">
-                Capital & Value Flywheel
-              </h2>
-              <p className="text-center text-slate-500 text-sm mb-10 max-w-2xl mx-auto">
-                Avança sits at the center of a recurring financial loop, capturing value at underwriting, enrollment, and repayment.
-              </p>
+            {/* ================= CLEAR CAPITAL FLOW ================= */}
+<section className="bg-white rounded-[2.5rem] shadow-2xl p-12 border">
+  <h2 className="text-2xl font-black text-center mb-3 uppercase tracking-tight">
+    Capital Flow — One Student Lifecycle
+  </h2>
+  <p className="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
+    Follow a single student from loan origination to repayment.
+    This sequence repeats at scale across the platform.
+  </p>
 
-              <div className="relative flex items-center justify-center">
-                <svg width="520" height="520" viewBox="0 0 520 520" className="absolute">
-                  <defs>
-                    <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
-                      <path d="M0,0 L0,6 L9,3 z" fill="#10b981" />
-                    </marker>
-                  </defs>
+  <div className="flex flex-col items-center space-y-8">
 
-                  <circle cx="260" cy="260" r="200" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+    {/* STEP 1 */}
+    <div className="w-full max-w-xl bg-slate-50 border rounded-2xl p-6 flex items-start gap-4">
+      <div className="w-8 h-8 rounded-full bg-emerald-500 text-white font-black flex items-center justify-center">
+        ①
+      </div>
+      <div className="flex-1">
+        <div className="font-black text-lg">Bank</div>
+        <div className="text-sm text-slate-600 mt-1">
+          Deploys loan capital to fund tuition
+        </div>
+        <div className="mt-3 text-xs bg-emerald-50 text-emerald-700 inline-block px-3 py-1 rounded-full font-bold">
+          Pays tuition + R$2,500 Avança tech fee
+        </div>
+      </div>
+      <Icon name="landmark" className="w-6 h-6 text-slate-400" />
+    </div>
 
-                  <path d="M260 60 A200 200 0 0 1 460 260" fill="none" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow)" />
-                  <path d="M460 260 A200 200 0 0 1 260 460" fill="none" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow)" />
-                  <path d="M260 460 A200 200 0 0 1 60 260" fill="none" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow)" />
-                  <path d="M60 260 A200 200 0 0 1 260 60" fill="none" stroke="#10b981" strokeWidth="3" markerEnd="url(#arrow)" />
-                </svg>
+    <Icon name="arrow-down" className="w-6 h-6 text-slate-300" />
 
-                <div className="w-40 h-40 bg-slate-900 rounded-full flex flex-col items-center justify-center text-white z-10 border-4 border-emerald-500 shadow-xl">
-                  <Icon name="cpu" className="w-8 h-8 text-emerald-400 mb-2" />
-                  <div className="font-black text-sm">AVANÇA ML</div>
-                  <div className="text-[10px] opacity-70 uppercase">Capital Orchestrator</div>
-                </div>
+    {/* STEP 2 */}
+    <div className="w-full max-w-xl bg-slate-50 border rounded-2xl p-6 flex items-start gap-4">
+      <div className="w-8 h-8 rounded-full bg-emerald-500 text-white font-black flex items-center justify-center">
+        ②
+      </div>
+      <div className="flex-1">
+        <div className="font-black text-lg">University</div>
+        <div className="text-sm text-slate-600 mt-1">
+          Receives tuition and educates the student
+        </div>
+        <div className="mt-3 text-xs bg-emerald-50 text-emerald-700 inline-block px-3 py-1 rounded-full font-bold">
+          Pays R$1,500 placement fee to Avança
+        </div>
+      </div>
+      <Icon name="graduation-cap" className="w-6 h-6 text-slate-400" />
+    </div>
 
-                {[
-                  ["top-0 left-1/2 -translate-x-1/2", "Bank", "Deploys R$60k", "+ R$2,500 Tech Fee"],
-                  ["right-0 top-1/2 -translate-y-1/2", "University", "Receives Tuition", "+ R$1,500 Placement Fee"],
-                  ["bottom-0 left-1/2 -translate-x-1/2", "Student (Ana)", "Repays Loan", "1.5% Monthly Commission"],
-                  ["left-0 top-1/2 -translate-y-1/2", "Bank", "Capital Returns", "Risk ↓ · Volume ↑"]
-                ].map(([pos, t, d, v], i) => (
-                  <div key={i} className={`absolute ${pos}`}>
-                    <div className="bg-white border rounded-xl p-3 shadow text-center w-44">
-                      <div className="font-bold text-sm">{t}</div>
-                      <div className="text-[10px] text-slate-500">{d}</div>
-                      <div className="text-[10px] text-emerald-600 font-bold mt-1">{v}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+    <Icon name="arrow-down" className="w-6 h-6 text-slate-300" />
+
+    {/* STEP 3 */}
+    <div className="w-full max-w-xl bg-slate-50 border rounded-2xl p-6 flex items-start gap-4">
+      <div className="w-8 h-8 rounded-full bg-emerald-500 text-white font-black flex items-center justify-center">
+        ③
+      </div>
+      <div className="flex-1">
+        <div className="font-black text-lg">Student (Ana)</div>
+        <div className="text-sm text-slate-600 mt-1">
+          Completes education and enters the workforce
+        </div>
+        <div className="mt-3 text-xs bg-emerald-50 text-emerald-700 inline-block px-3 py-1 rounded-full font-bold">
+          Repays loan over time
+        </div>
+      </div>
+      <Icon name="users" className="w-6 h-6 text-slate-400" />
+    </div>
+
+    <Icon name="arrow-down" className="w-6 h-6 text-slate-300" />
+
+    {/* STEP 4 */}
+    <div className="w-full max-w-xl bg-slate-900 border-4 border-emerald-500/40 rounded-2xl p-6 flex items-start gap-4 text-white shadow-xl">
+      <div className="w-8 h-8 rounded-full bg-emerald-500 text-slate-900 font-black flex items-center justify-center">
+        ④
+      </div>
+      <div className="flex-1">
+        <div className="font-black text-lg">Bank (Capital Returns)</div>
+        <div className="text-sm text-slate-300 mt-1">
+          Loan principal and interest return with lower default risk
+        </div>
+        <div className="mt-3 text-xs bg-emerald-500/20 text-emerald-400 inline-block px-3 py-1 rounded-full font-bold">
+          Avança takes 1.5% repayment commission
+        </div>
+      </div>
+      <Icon name="repeat" className="w-6 h-6 text-emerald-400" />
+    </div>
+
+    {/* LOOP NOTE */}
+    <div className="mt-6 text-center text-xs text-slate-500 italic flex items-center gap-2">
+      <Icon name="refresh-cw" className="w-4 h-4" />
+      This lifecycle repeats across thousands of students, compounding platform revenue
+    </div>
+
+  </div>
+</section>
+
 
             {/* ================= ECOSYSTEM ================= */}
             <section className="bg-white rounded-[2.5rem] shadow-2xl p-12 border">
