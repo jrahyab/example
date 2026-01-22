@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Avança ML – Marketplace Diagram</title>
+  <title>Avança Tech — Linear Marketplace & Unit Economics</title>
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -22,123 +22,159 @@
   <div id="root"></div>
 
   <script type="text/babel">
+    const { useState, useEffect } = React;
+
     function Icon({ name, className }) {
       return <i data-lucide={name} className={className}></i>;
     }
 
     function App() {
-      const revenueStreams = [
-        {
-          id: 'bank',
-          title: "Bank Tech Fee",
-          payer: "The Bank",
-          logic: "Per-student risk assessment fee (subscription) for the ML underwriting engine.",
-          value: "Lower Risk / Higher Volume",
-          icon: "landmark"
-        },
-        {
-          id: 'uni',
-          title: "University Recruiting Fee",
-          payer: "The University",
-          logic: "A success fee for every student Avança helps enroll and fund.",
-          value: "Increased Enrollment",
-          icon: "building-2"
-        },
-        {
-          id: 'student',
-          title: "Success Commission",
-          payer: "The Student / Bank",
-          logic: "A small % cut of the repayment flow as a service fee.",
-          value: "Aligned Outcomes",
-          icon: "percent"
-        }
-      ];
+      const [inputs, setInputs] = useState({
+        bankFee: 2500,
+        uniFee: 1500,
+        serviceFee: 0.015,
+        avgSalary: 18000,
+        repaymentTerm: 120,
+        coca: 800
+      });
 
-      React.useEffect(() => {
+      const totalOneTimeFees = inputs.bankFee + inputs.uniFee;
+      const monthlyServiceFee = inputs.avgSalary * inputs.serviceFee;
+      const lifetimeServiceFees = monthlyServiceFee * inputs.repaymentTerm;
+      const ltv = Math.round(totalOneTimeFees + lifetimeServiceFees);
+      const ratio = (ltv / inputs.coca).toFixed(1);
+
+      useEffect(() => {
         lucide.createIcons();
       });
 
       return (
-        <div className="min-h-screen p-6 text-slate-900">
-          <div className="max-w-6xl mx-auto">
+        <div className="min-h-screen font-sans text-slate-900 pb-20">
 
-            {/* Header */}
-            <header className="mb-12 text-center">
-              <div className="inline-flex px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-bold mb-4 uppercase">
-                Model Shift: Capital-Light Marketplace
+          {/* HERO */}
+          <header className="bg-slate-900 text-white py-12 px-4">
+            <div className="max-w-6xl mx-auto text-center">
+              <div className="inline-flex px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold mb-6 uppercase tracking-widest border border-emerald-500/30">
+                Linear Marketplace Model
               </div>
-
-              <h1 className="text-5xl font-black mb-4 bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent italic">
-                AVANÇA TECH
+              <h1 className="text-4xl font-black mb-2">
+                AVANÇA <span className="text-emerald-500 italic">TECH</span>
               </h1>
-
-              <p className="text-xl text-slate-600 italic">
-                Using ML to unlock bank capital for high-potential students
+              <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+                The intelligent risk-mitigation bridge between banks, universities, and high-potential students.
               </p>
-            </header>
+            </div>
+          </header>
 
-            {/* Ecosystem */}
-            <section className="bg-white rounded-3xl shadow-xl p-8 mb-10 border">
-              <h2 className="text-2xl font-bold mb-8 flex justify-center items-center gap-2">
-                <Icon name="cpu" className="w-6 h-6 text-blue-600" />
-                The ML-Powered Ecosystem
+          <main className="max-w-5xl mx-auto -mt-10 px-4 space-y-12">
+
+            {/* MONEY FLOW */}
+            <section className="bg-white rounded-[2.5rem] shadow-2xl p-10 border">
+              <h2 className="text-2xl font-black text-center mb-10 uppercase">
+                Step-by-Step Money Flow
               </h2>
 
-              <div className="flex flex-col md:flex-row items-center justify-around gap-10">
+              <div className="flex flex-col items-center space-y-6">
 
-                {/* Core */}
-                <div className="w-64 h-64 bg-slate-900 rounded-full flex flex-col items-center justify-center text-white border-8 border-emerald-500 shadow-2xl relative">
-                  <div className="absolute -top-4 bg-emerald-500 text-xs font-bold px-3 py-1 rounded-full text-slate-900">
-                    OUR MOAT
-                  </div>
-
-                  <Icon name="cpu" className="w-12 h-12 text-emerald-400 mb-2 animate-pulse" />
-                  <div className="font-black">AVANÇA ML</div>
-                  <div className="text-xs opacity-70 uppercase">
-                    Underwriting Engine
-                  </div>
-                </div>
-
-                {/* Partners */}
-                <div className="flex flex-col gap-6 w-64">
-                  {[
-                    { label: "Banks", desc: "Provides the Capital", icon: "landmark" },
-                    { label: "Students", desc: "Provides the Potential", icon: "users" },
-                    { label: "Universities", desc: "Provides the Degree", icon: "graduation-cap" }
-                  ].map((p, i) => (
-                    <div key={i} className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border">
-                      <Icon name={p.icon} className="w-5 h-5" />
-                      <div>
-                        <div className="font-bold text-sm">{p.label}</div>
-                        <div className="text-xs text-slate-500">{p.desc}</div>
+                {[
+                  { label: "Student (Ana)", sub: "Initiates Journey", icon: "users", color: "blue" },
+                  { label: "Avança ML", sub: "Predictive Underwriting", icon: "database", dark: true },
+                  { label: "The Bank", sub: "Deploys Capital", icon: "landmark", color: "blue" },
+                  { label: "University", sub: "Receives Tuition", icon: "graduation-cap", color: "purple" }
+                ].map((s, i) => (
+                  <React.Fragment key={i}>
+                    <div className={`w-full max-w-md rounded-2xl p-4 flex items-center gap-4 ${
+                      s.dark
+                        ? "bg-slate-900 text-white border-4 border-emerald-500/30"
+                        : "bg-slate-50 border"
+                    }`}>
+                      <div className={`p-2 rounded-lg ${
+                        s.dark ? "bg-emerald-500 text-slate-900" : "bg-white"
+                      }`}>
+                        <Icon name={s.icon} className="w-5 h-5" />
                       </div>
-                      <Icon name="check-circle" className="w-4 h-4 text-emerald-500 ml-auto" />
+                      <div>
+                        <p className="font-bold">{s.label}</p>
+                        <p className="text-[10px] opacity-70 uppercase font-bold">{s.sub}</p>
+                      </div>
                     </div>
-                  ))}
-                </div>
+                    {i < 3 && <Icon name="arrow-down" className="w-5 h-5 text-slate-300" />}
+                  </React.Fragment>
+                ))}
               </div>
             </section>
 
-            {/* Revenue */}
-            <div className="grid md:grid-cols-3 gap-6">
-              {revenueStreams.map(s => (
-                <div key={s.id} className="bg-white p-6 rounded-3xl shadow-lg border">
-                  <Icon name={s.icon} className="w-8 h-8 mb-4" />
-                  <h3 className="font-black">{s.title}</h3>
-                  <div className="text-xs uppercase text-slate-400 mb-2">
-                    Paid by: {s.payer}
+            {/* ECONOMICS */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+              {/* INPUTS */}
+              <div className="lg:col-span-4 bg-white rounded-3xl p-8 shadow-xl border">
+                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+                  <Icon name="calculator" className="w-5 h-5 text-blue-600" />
+                  Economics Config
+                </h3>
+
+                {[
+                  { label: "Bank Tech Fee (R$)", key: "bankFee" },
+                  { label: "Uni Referral Fee (R$)", key: "uniFee" },
+                  { label: "Service Fee (%)", key: "serviceFee", step: 0.005 },
+                  { label: "COCA (R$)", key: "coca" }
+                ].map(f => (
+                  <div key={f.key} className="mb-4">
+                    <label className="text-[10px] uppercase font-black text-slate-400">
+                      {f.label}
+                    </label>
+                    <input
+                      type="number"
+                      step={f.step || 1}
+                      value={inputs[f.key]}
+                      onChange={e =>
+                        setInputs({ ...inputs, [f.key]: Number(e.target.value) })
+                      }
+                      className="w-full mt-1 bg-slate-50 border rounded-xl p-3 text-sm font-bold"
+                    />
                   </div>
-                  <p className="text-sm text-slate-600 mb-3">
-                    {s.logic}
-                  </p>
-                  <div className="bg-emerald-50 text-emerald-700 text-xs font-bold p-2 rounded-lg text-center">
-                    Value: {s.value}
+                ))}
+              </div>
+
+              {/* METRICS */}
+              <div className="lg:col-span-8 bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative">
+                <div className="absolute bottom-0 right-0 opacity-5">
+                  <Icon name="bar-chart-3" className="w-64 h-64" />
+                </div>
+
+                <div className="relative z-10">
+                  <h3 className="text-2xl font-black italic mb-8">
+                    UNIT METRICS
+                  </h3>
+
+                  <div className="grid md:grid-cols-2 gap-10">
+                    <div>
+                      <p className="text-[10px] uppercase text-slate-500 font-bold">COCA</p>
+                      <div className="text-4xl font-black">
+                        R$ {inputs.coca.toLocaleString()}
+                      </div>
+
+                      <p className="mt-6 text-[10px] uppercase text-slate-500 font-bold">LTV</p>
+                      <div className="text-4xl font-black text-emerald-400">
+                        R$ {ltv.toLocaleString()}
+                      </div>
+                    </div>
+
+                    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col items-center justify-center">
+                      <div className="text-7xl font-black text-emerald-400">
+                        {ratio}x
+                      </div>
+                      <div className="text-xs uppercase tracking-widest opacity-60">
+                        LTV : COCA
+                      </div>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
 
-          </div>
+            </div>
+          </main>
         </div>
       );
     }
