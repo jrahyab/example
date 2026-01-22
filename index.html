@@ -115,4 +115,141 @@
                 </div>
 
                 {/* PARTNERS */}
-                <div className="flex flex-col gap-6
+                <div className="flex flex-col gap-6 w-64">
+                  {[
+                    { label: "Banks", desc: "Provides the Capital", icon: "landmark" },
+                    { label: "Students", desc: "Provides the Potential", icon: "users" },
+                    { label: "Universities", desc: "Provides the Degree", icon: "graduation-cap" }
+                  ].map((p, i) => (
+                    <div key={i} className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border">
+                      <Icon name={p.icon} className="w-5 h-5" />
+                      <div>
+                        <div className="font-bold text-sm">{p.label}</div>
+                        <div className="text-xs text-slate-500">{p.desc}</div>
+                      </div>
+                      <Icon name="check-circle" className="w-4 h-4 text-emerald-500 ml-auto" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* REVENUE STREAMS */}
+              <div className="grid md:grid-cols-3 gap-6 mt-14">
+                {revenueStreams.map(r => (
+                  <div key={r.id} className="bg-white p-6 rounded-3xl shadow-lg border">
+                    <Icon name={r.icon} className="w-8 h-8 mb-4" />
+                    <h3 className="font-black mb-1">{r.title}</h3>
+                    <div className="text-[10px] uppercase text-slate-400 font-bold mb-2">
+                      Paid by: {r.payer}
+                    </div>
+                    <p className="text-sm text-slate-600 mb-4">{r.logic}</p>
+                    <div className="bg-emerald-50 text-emerald-700 text-xs font-bold p-2 rounded-lg text-center">
+                      Value: {r.value}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* ================= LINEAR FLOW ================= */}
+            <section className="bg-white rounded-[2.5rem] shadow-2xl p-10 border">
+              <h2 className="text-2xl font-black text-center mb-10 uppercase">
+                Step-by-Step Money Flow
+              </h2>
+
+              <div className="flex flex-col items-center space-y-6">
+                {[
+                  { label: "Student (Ana)", sub: "Initiates Journey", icon: "users" },
+                  { label: "Avança ML", sub: "Risk Scoring", icon: "database", dark: true },
+                  { label: "The Bank", sub: "Deploys Capital", icon: "landmark" },
+                  { label: "University", sub: "Receives Tuition", icon: "graduation-cap" }
+                ].map((s, i) => (
+                  <React.Fragment key={i}>
+                    <div className={`w-full max-w-md rounded-2xl p-4 flex items-center gap-4 ${
+                      s.dark ? "bg-slate-900 text-white border-4 border-emerald-500/30" : "bg-slate-50 border"
+                    }`}>
+                      <div className={`p-2 rounded-lg ${s.dark ? "bg-emerald-500 text-slate-900" : "bg-white"}`}>
+                        <Icon name={s.icon} className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="font-bold">{s.label}</p>
+                        <p className="text-[10px] opacity-70 uppercase font-bold">{s.sub}</p>
+                      </div>
+                    </div>
+                    {i < 3 && <Icon name="arrow-down" className="w-5 h-5 text-slate-300" />}
+                  </React.Fragment>
+                ))}
+              </div>
+            </section>
+
+            {/* ================= UNIT ECONOMICS ================= */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+              <div className="lg:col-span-4 bg-white rounded-3xl p-8 shadow-xl border">
+                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+                  <Icon name="calculator" className="w-5 h-5 text-blue-600" />
+                  Economics Config
+                </h3>
+
+                {[
+                  { label: "Bank Tech Fee (R$)", key: "bankFee" },
+                  { label: "Uni Referral Fee (R$)", key: "uniFee" },
+                  { label: "Service Fee (%)", key: "serviceFee", step: 0.005 },
+                  { label: "COCA (R$)", key: "coca" }
+                ].map(f => (
+                  <div key={f.key} className="mb-4">
+                    <label className="text-[10px] uppercase font-black text-slate-400">
+                      {f.label}
+                    </label>
+                    <input
+                      type="number"
+                      step={f.step || 1}
+                      value={inputs[f.key]}
+                      onChange={e =>
+                        setInputs({ ...inputs, [f.key]: Number(e.target.value) })
+                      }
+                      className="w-full mt-1 bg-slate-50 border rounded-xl p-3 text-sm font-bold"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="lg:col-span-8 bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative">
+                <div className="absolute bottom-0 right-0 opacity-5">
+                  <Icon name="bar-chart-3" className="w-64 h-64" />
+                </div>
+
+                <div className="relative z-10">
+                  <h3 className="text-2xl font-black italic mb-8">UNIT METRICS</h3>
+
+                  <div className="grid md:grid-cols-2 gap-10">
+                    <div>
+                      <p className="text-[10px] uppercase text-slate-500 font-bold">COCA</p>
+                      <div className="text-4xl font-black">R$ {inputs.coca.toLocaleString()}</div>
+
+                      <p className="mt-6 text-[10px] uppercase text-slate-500 font-bold">LTV</p>
+                      <div className="text-4xl font-black text-emerald-400">
+                        R$ {ltv.toLocaleString()}
+                      </div>
+                    </div>
+
+                    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col items-center justify-center">
+                      <div className="text-7xl font-black text-emerald-400">{ratio}x</div>
+                      <div className="text-xs uppercase tracking-widest opacity-60">
+                        LTV : COCA
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
