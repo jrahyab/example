@@ -2,184 +2,548 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Avança Tech — Linear Marketplace & Unit Economics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avança | Financing Potential, Not Privilege</title>
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- React -->
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-  <!-- Babel -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
-  <!-- Lucide SVG -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-pattern {
+      background-color: #f8fafc;
+      background-image: radial-gradient(#cbd5e1 0.5px, transparent 0.5px);
+      background-size: 24px 24px;
+    }
+
+    /* Anchor offset for sticky header */
+    section { scroll-margin-top: 96px; }
+  </style>
 </head>
 
-<body class="bg-slate-50">
-  <div id="root"></div>
+<body class="bg-white text-slate-900">
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+<!-- =========================
+  NAV (Sticky, wall-attached)
+========================= -->
+<nav class="sticky top-0 z-50 bg-white border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+        <i class="fas fa-chart-line text-white"></i>
+      </div>
+      <span class="text-2xl font-bold tracking-tight">Avança</span>
+    </a>
 
-    function Icon({ name, className }) {
-      return <i data-lucide={name} className={className}></i>;
-    }
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+      <a href="#problem" class="hover:text-blue-600 transition">Problem</a>
+      <a href="#solution" class="hover:text-blue-600 transition">How It Works</a>
+      <a href="#ana" class="hover:text-blue-600 transition">Meet Ana</a>
+      <a href="#simulator" class="hover:text-blue-600 transition">Simulator</a>
+      <a href="#ecosystem" class="hover:text-blue-600 transition">Ecosystem</a>
+    </div>
 
-    function App() {
-      const [inputs, setInputs] = useState({
-        bankFee: 2500,
-        uniFee: 1500,
-        serviceFee: 0.015,
-        avgSalary: 18000,
-        repaymentTerm: 120,
-        coca: 800
-      });
+    <div class="flex items-center gap-3">
+      <a href="#apply" class="bg-blue-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-blue-700 transition shadow-sm">
+        Apply
+      </a>
+    </div>
+  </div>
+</nav>
 
-      const totalOneTimeFees = inputs.bankFee + inputs.uniFee;
-      const monthlyServiceFee = inputs.avgSalary * inputs.serviceFee;
-      const lifetimeServiceFees = monthlyServiceFee * inputs.repaymentTerm;
-      const ltv = Math.round(totalOneTimeFees + lifetimeServiceFees);
-      const ratio = (ltv / inputs.coca).toFixed(1);
+<!-- =========================
+  HERO
+========================= -->
+<section id="top" class="hero-pattern pt-28 pb-24">
+  <div class="max-w-5xl mx-auto px-6 text-center">
 
-      useEffect(() => {
-        lucide.createIcons();
-      });
+    <span class="inline-block py-1.5 px-4 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-7">
+      Education by Merit, Not by Credit
+    </span>
 
-      return (
-        <div className="min-h-screen font-sans text-slate-900 pb-20">
+    <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-7">
+      Financing potential,<br />
+      <span class="gradient-text">not privilege.</span>
+    </h1>
 
-          {/* HERO */}
-          <header className="bg-slate-900 text-white py-12 px-4">
-            <div className="max-w-6xl mx-auto text-center">
-              <div className="inline-flex px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold mb-6 uppercase tracking-widest border border-emerald-500/30">
-                Linear Marketplace Model
-              </div>
-              <h1 className="text-4xl font-black mb-2">
-                AVANÇA <span className="text-emerald-500 italic">TECH</span>
-              </h1>
-              <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-                The intelligent risk-mitigation bridge between banks, universities, and high-potential students.
+    <p class="text-xl text-slate-600 max-w-3xl mx-auto mb-10 leading-relaxed">
+      Avança uses machine learning to assess student potential and reduce risk for banks —
+      enabling partner lenders to fund capable students and helping universities convert accepted students into enrolled students.
+    </p>
+
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
+      <a href="#apply" class="bg-slate-900 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-slate-800 transition">
+        Apply as a Student
+      </a>
+      <a href="#solution" class="bg-white text-slate-900 border-2 border-slate-200 px-8 py-4 rounded-xl text-lg font-semibold hover:border-blue-600 hover:text-blue-600 transition">
+        See How It Works
+      </a>
+    </div>
+
+    <div class="mt-10 flex flex-wrap justify-center gap-3 text-sm text-slate-500">
+      <span class="inline-flex items-center gap-2 bg-white/80 border border-slate-200 rounded-full px-4 py-2">
+        <i class="fas fa-microchip text-blue-600"></i>
+        ML Underwriting Score
+      </span>
+      <span class="inline-flex items-center gap-2 bg-white/80 border border-slate-200 rounded-full px-4 py-2">
+        <i class="fas fa-building-columns text-blue-600"></i>
+        Bank-Issued Loans
+      </span>
+      <span class="inline-flex items-center gap-2 bg-white/80 border border-slate-200 rounded-full px-4 py-2">
+        <i class="fas fa-school text-blue-600"></i>
+        Funded Enrollment
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+  PROBLEM (Reframed)
+========================= -->
+<section id="problem" class="py-28 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+
+      <div>
+        <h2 class="text-4xl font-bold mb-6">The Real Problem: A Credit Market Failure</h2>
+
+        <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+          In Brazil, the education gap is not primarily a problem of demand or institutional capacity —
+          it’s a systemic underwriting failure. Traditional credit systems evaluate history (credit score),
+          not future earning potential, excluding millions of capable students.
+        </p>
+
+        <div class="space-y-6">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center shrink-0">
+              <i class="fas fa-exclamation-triangle text-red-500"></i>
+            </div>
+            <div>
+              <h4 class="font-bold">The Credit Trap</h4>
+              <p class="text-sm text-slate-500 leading-relaxed">
+                Millions are “negativados” or lack credit history, so banks reject them regardless of academic merit or future income potential.
               </p>
             </div>
-          </header>
+          </div>
 
-          <main className="max-w-5xl mx-auto -mt-10 px-4 space-y-12">
-
-            {/* MONEY FLOW */}
-            <section className="bg-white rounded-[2.5rem] shadow-2xl p-10 border">
-              <h2 className="text-2xl font-black text-center mb-10 uppercase">
-                Step-by-Step Money Flow
-              </h2>
-
-              <div className="flex flex-col items-center space-y-6">
-
-                {[
-                  { label: "Student (Ana)", sub: "Initiates Journey", icon: "users", color: "blue" },
-                  { label: "Avança ML", sub: "Predictive Underwriting", icon: "database", dark: true },
-                  { label: "The Bank", sub: "Deploys Capital", icon: "landmark", color: "blue" },
-                  { label: "University", sub: "Receives Tuition", icon: "graduation-cap", color: "purple" }
-                ].map((s, i) => (
-                  <React.Fragment key={i}>
-                    <div className={`w-full max-w-md rounded-2xl p-4 flex items-center gap-4 ${
-                      s.dark
-                        ? "bg-slate-900 text-white border-4 border-emerald-500/30"
-                        : "bg-slate-50 border"
-                    }`}>
-                      <div className={`p-2 rounded-lg ${
-                        s.dark ? "bg-emerald-500 text-slate-900" : "bg-white"
-                      }`}>
-                        <Icon name={s.icon} className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="font-bold">{s.label}</p>
-                        <p className="text-[10px] opacity-70 uppercase font-bold">{s.sub}</p>
-                      </div>
-                    </div>
-                    {i < 3 && <Icon name="arrow-down" className="w-5 h-5 text-slate-300" />}
-                  </React.Fragment>
-                ))}
-              </div>
-            </section>
-
-            {/* ECONOMICS */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-              {/* INPUTS */}
-              <div className="lg:col-span-4 bg-white rounded-3xl p-8 shadow-xl border">
-                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-                  <Icon name="calculator" className="w-5 h-5 text-blue-600" />
-                  Economics Config
-                </h3>
-
-                {[
-                  { label: "Bank Tech Fee (R$)", key: "bankFee" },
-                  { label: "Uni Referral Fee (R$)", key: "uniFee" },
-                  { label: "Service Fee (%)", key: "serviceFee", step: 0.005 },
-                  { label: "COCA (R$)", key: "coca" }
-                ].map(f => (
-                  <div key={f.key} className="mb-4">
-                    <label className="text-[10px] uppercase font-black text-slate-400">
-                      {f.label}
-                    </label>
-                    <input
-                      type="number"
-                      step={f.step || 1}
-                      value={inputs[f.key]}
-                      onChange={e =>
-                        setInputs({ ...inputs, [f.key]: Number(e.target.value) })
-                      }
-                      className="w-full mt-1 bg-slate-50 border rounded-xl p-3 text-sm font-bold"
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* METRICS */}
-              <div className="lg:col-span-8 bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative">
-                <div className="absolute bottom-0 right-0 opacity-5">
-                  <Icon name="bar-chart-3" className="w-64 h-64" />
-                </div>
-
-                <div className="relative z-10">
-                  <h3 className="text-2xl font-black italic mb-8">
-                    UNIT METRICS
-                  </h3>
-
-                  <div className="grid md:grid-cols-2 gap-10">
-                    <div>
-                      <p className="text-[10px] uppercase text-slate-500 font-bold">COCA</p>
-                      <div className="text-4xl font-black">
-                        R$ {inputs.coca.toLocaleString()}
-                      </div>
-
-                      <p className="mt-6 text-[10px] uppercase text-slate-500 font-bold">LTV</p>
-                      <div className="text-4xl font-black text-emerald-400">
-                        R$ {ltv.toLocaleString()}
-                      </div>
-                    </div>
-
-                    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col items-center justify-center">
-                      <div className="text-7xl font-black text-emerald-400">
-                        {ratio}x
-                      </div>
-                      <div className="text-xs uppercase tracking-widest opacity-60">
-                        LTV : COCA
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center shrink-0">
+              <i class="fas fa-user-slash text-red-500"></i>
             </div>
-          </main>
-        </div>
-      );
-    }
+            <div>
+              <h4 class="font-bold">The Dropout Crisis</h4>
+              <p class="text-sm text-slate-500 leading-relaxed">
+                Private institutions absorb most demand, yet dropout rates remain high due to financial instability — financing fails at entry and throughout the journey.
+              </p>
+            </div>
+          </div>
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center shrink-0">
+              <i class="fas fa-arrow-trend-down text-red-500"></i>
+            </div>
+            <div>
+              <h4 class="font-bold">Misaligned Incentives</h4>
+              <p class="text-sm text-slate-500 leading-relaxed">
+                Banks want safe portfolios, universities want stable enrollment, and students want dignity — but the system lacks a shared risk framework.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats card -->
+      <div class="bg-slate-50 p-10 rounded-3xl border border-slate-200">
+        <div class="grid grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-100">
+            <div class="text-4xl font-bold text-blue-600 mb-1">21%</div>
+            <div class="text-xs uppercase font-bold text-slate-500">Tertiary Graduates (Brazil)</div>
+          </div>
+          <div class="bg-white p-6 rounded-2xl border border-slate-100">
+            <div class="text-4xl font-bold text-slate-400 mb-1">47%</div>
+            <div class="text-xs uppercase font-bold text-slate-500">OECD Average</div>
+          </div>
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 col-span-2">
+            <div class="text-4xl font-bold text-red-500 mb-1">75%</div>
+            <div class="text-xs uppercase font-bold text-slate-500 text-center">
+              Higher-ed students enrolled in private institutions depend on financing
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 bg-white rounded-2xl border border-slate-100 p-6">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fas fa-lightbulb text-blue-600"></i>
+            <div class="font-bold">Key Insight</div>
+          </div>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Higher education has strong long-term returns — but the credit system can’t see them.
+            Avança makes future potential legible to lenders.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+  SOLUTION (Three-Sided Marketplace)
+========================= -->
+<section id="solution" class="py-32 bg-gradient-to-b from-slate-950 to-slate-900 text-white">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <div class="text-center mb-16">
+      <h2 class="text-5xl font-bold mb-6">Success-Linked Financing</h2>
+      <p class="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
+        Avança is not the lender. Our product is the ML underwriting score that reduces risk for banks
+        and turns student potential into credit — aligning students, banks, and universities.
+      </p>
+    </div>
+
+    <div class="relative rounded-[2.5rem] bg-slate-800/45 border border-slate-700 p-10 md:p-12 overflow-hidden">
+
+      <div class="grid lg:grid-cols-3 gap-8 items-stretch">
+
+        <!-- Students -->
+        <div class="rounded-3xl bg-slate-900/45 border border-slate-700 p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center">
+              <i class="fas fa-user-graduate text-slate-200 text-xl"></i>
+            </div>
+            <div>
+              <div class="text-lg font-bold">Students (Ana)</div>
+              <div class="text-sm text-slate-400">Credit-excluded, high-merit</div>
+            </div>
+          </div>
+
+          <ul class="text-slate-300 space-y-2 text-sm leading-relaxed">
+            <li>• Apply through Avança</li>
+            <li>• Evaluated on potential, not credit history</li>
+            <li>• Receive a partner bank loan offer</li>
+            <li>• Repay only after earning income</li>
+          </ul>
+
+          <div class="mt-6 rounded-2xl bg-white/5 border border-white/10 p-4">
+            <div class="text-xs uppercase tracking-wider text-slate-300 mb-1">Student experience</div>
+            <div class="text-sm text-slate-100">Dignified, transparent, merit-based approval</div>
+          </div>
+        </div>
+
+        <!-- Avança ML Engine (Center) -->
+        <div class="rounded-3xl bg-gradient-to-b from-blue-600/20 to-purple-600/10 border border-blue-500/30 p-8 relative">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+              <i class="fas fa-microchip text-blue-200 text-xl"></i>
+            </div>
+            <div>
+              <div class="text-lg font-bold">Avança ML Underwriting Score</div>
+              <div class="text-sm text-slate-300">The product (our moat)</div>
+            </div>
+          </div>
+
+          <p class="text-slate-200 text-sm leading-relaxed mb-6">
+            We predict future earning potential using academic performance, program outcomes,
+            and labor market demand — producing a score and decision insights that help banks
+            lend responsibly to students they would otherwise reject.
+          </p>
+
+          <div class="grid gap-3">
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+              <div class="text-xs uppercase tracking-wider text-slate-300 mb-1">Banks pay Avança</div>
+              <div class="text-sm text-slate-100">Risk-tech fee / underwriting fee / performance fee</div>
+            </div>
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+              <div class="text-xs uppercase tracking-wider text-slate-300 mb-1">Universities pay Avança</div>
+              <div class="text-sm text-slate-100">Funded enrollment / reduced dropout</div>
+            </div>
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+              <div class="text-xs uppercase tracking-wider text-slate-300 mb-1">Optional</div>
+              <div class="text-sm text-slate-100">Light servicing fee tied to successful repayment</div>
+            </div>
+          </div>
+
+          <div class="absolute -top-14 -left-14 w-44 h-44 bg-blue-500/10 rounded-full blur-3xl"></div>
+          <div class="absolute -bottom-14 -right-14 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <!-- Banks + Universities -->
+        <div class="grid gap-8">
+
+          <!-- Banks -->
+          <div class="rounded-3xl bg-slate-900/45 border border-slate-700 p-8">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center">
+                <i class="fas fa-building-columns text-slate-200 text-xl"></i>
+              </div>
+              <div>
+                <div class="text-lg font-bold">Banks</div>
+                <div class="text-sm text-slate-400">Capital + balance sheet</div>
+              </div>
+            </div>
+
+            <ul class="text-slate-300 space-y-2 text-sm leading-relaxed">
+              <li>• Issue regulated student loans</li>
+              <li>• Use Avança score to approve</li>
+              <li>• Improve risk-adjusted returns</li>
+              <li>• Expand credit access responsibly</li>
+            </ul>
+          </div>
+
+          <!-- Universities -->
+          <div class="rounded-3xl bg-slate-900/45 border border-slate-700 p-8">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center">
+                <i class="fas fa-school text-slate-200 text-xl"></i>
+              </div>
+              <div>
+                <div class="text-lg font-bold">Universities</div>
+                <div class="text-sm text-slate-400">Enrollment + retention</div>
+              </div>
+            </div>
+
+            <ul class="text-slate-300 space-y-2 text-sm leading-relaxed">
+              <li>• Convert accepted → enrolled</li>
+              <li>• Reduce dropout from non-payment</li>
+              <li>• Stabilize tuition revenue</li>
+              <li>• Share outcomes data signals</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Flow row -->
+      <div class="mt-10 grid md:grid-cols-3 gap-6 text-sm">
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+          <div class="font-semibold text-slate-100 mb-1">1) Student applies</div>
+          <div class="text-slate-300">Ana submits academic + program context through Avança.</div>
+        </div>
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+          <div class="font-semibold text-slate-100 mb-1">2) Avança scores</div>
+          <div class="text-slate-300">We generate underwriting score + decision insights for partners.</div>
+        </div>
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+          <div class="font-semibold text-slate-100 mb-1">3) Bank funds</div>
+          <div class="text-slate-300">A bank issues a loan → Ana enrolls → repayment starts after income.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+  MEET ANA (Iconographic)
+========================= -->
+<section id="ana" class="py-28 bg-white">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="flex items-center gap-5 mb-10">
+      <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+        <i class="fas fa-user-graduate text-blue-600 text-3xl"></i>
+      </div>
+      <div>
+        <h2 class="text-4xl font-bold">Meet Ana</h2>
+        <p class="text-slate-500 mt-1">A real persona Avança is designed for</p>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="md:col-span-2">
+        <p class="text-lg text-slate-600 mb-6 leading-relaxed">
+          Ana is a capable, low-income Brazilian student accepted into a private medical school —
+          but blocked by financing, not merit. Banks reject her because she has no credit history and no co-signer.
+        </p>
+
+        <p class="text-lg text-slate-700 leading-relaxed">
+          With Avança, Ana is evaluated on potential — not credit history.
+          A partner bank can issue her a loan with confidence, and she repays only after earning income.
+          Avança wins only when Ana wins.
+        </p>
+      </div>
+
+      <div class="rounded-3xl bg-slate-50 border border-slate-200 p-6">
+        <div class="font-bold mb-3">Ana’s priorities</div>
+        <ul class="text-sm text-slate-600 space-y-2">
+          <li class="flex gap-2"><i class="fas fa-check text-blue-600 mt-0.5"></i> Enroll now — not someday</li>
+          <li class="flex gap-2"><i class="fas fa-check text-blue-600 mt-0.5"></i> Avoid unfair debt traps</li>
+          <li class="flex gap-2"><i class="fas fa-check text-blue-600 mt-0.5"></i> Become a doctor and support her family</li>
+        </ul>
+
+        <div class="mt-6 rounded-2xl bg-white border border-slate-200 p-4">
+          <div class="text-xs uppercase font-bold text-slate-500 mb-1">As-Is</div>
+          <div class="text-sm text-slate-700">Accepted, but can’t afford to enroll.</div>
+          <div class="mt-3 text-xs uppercase font-bold text-slate-500 mb-1">Possible</div>
+          <div class="text-sm text-slate-700">Funded enrollment + pay only after income.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+  SIMULATOR (Updated framing)
+========================= -->
+<section id="simulator" class="py-28 bg-white">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="bg-slate-50 rounded-[2.5rem] p-8 md:p-12 border border-slate-200">
+      <h2 class="text-4xl font-bold mb-3 text-center">Avança Simulator</h2>
+      <p class="text-center text-slate-500 mb-12">
+        Compare the experience of traditional credit vs. Avança-enabled bank lending
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-10">
+        <div class="space-y-6">
+          <h4 class="font-bold text-lg border-b pb-2">Traditional Credit</h4>
+
+          <div class="flex justify-between text-sm">
+            <span class="text-slate-500">Access:</span>
+            <span class="font-semibold text-red-600">Co-signer / strong credit required</span>
+          </div>
+
+          <div class="flex justify-between text-sm">
+            <span class="text-slate-500">Underwriting:</span>
+            <span class="font-semibold text-red-600">Past-focused</span>
+          </div>
+
+          <div class="flex justify-between text-sm">
+            <span class="text-slate-500">If income drops:</span>
+            <span class="font-semibold text-red-600">Rigid repayment pressure</span>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <h4 class="font-bold text-lg border-b pb-2 text-blue-600">Avança + Partner Bank</h4>
+
+          <div class="flex justify-between text-sm">
+            <span class="text-slate-500">Access:</span>
+            <span class="font-semibold text-blue-600">Merit + potential score</span>
+          </div>
+
+          <div class="flex justify-between text-sm">
+            <span class="text-slate-500">Underwriting:</span>
+            <span class="font-semibold text-blue-600">Future-income focused</span>
+          </div>
+
+          <div class="flex justify-between text-sm">
+            <span class="text-slate-500">If income drops:</span>
+            <span class="font-semibold text-blue-600">Success-linked flexibility</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 bg-blue-600 rounded-2xl p-6 text-white text-center">
+        <div class="text-sm opacity-90 mb-1">The outcome</div>
+        <div class="text-3xl md:text-4xl font-bold">More approvals, lower risk, funded enrollment</div>
+        <div class="text-xs mt-2 italic opacity-90">Aligned incentives across students, banks, and universities</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+  ECOSYSTEM
+========================= -->
+<section id="ecosystem" class="py-24 bg-slate-50">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <h2 class="text-2xl font-bold text-slate-400 uppercase tracking-widest text-sm">Our Ecosystem</h2>
+      <p class="text-slate-600 mt-3 max-w-2xl mx-auto">
+        Avança is building a three-sided marketplace connecting students, banks, and universities —
+        with employers as a strategic extension over time.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-60 grayscale hover:grayscale-0 transition duration-500 text-center">
+      <div class="font-bold text-xl italic text-slate-800">BANK PARTNER</div>
+      <div class="font-bold text-xl italic text-slate-800">UNIVERSITY</div>
+      <div class="font-bold text-xl italic text-slate-800">HEALTH NETWORK</div>
+      <div class="font-bold text-xl italic text-slate-800">EMPLOYER</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+  APPLY (CTA)
+========================= -->
+<section id="apply" class="py-28 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-[3rem] p-12 md:p-14 text-center text-white relative overflow-hidden shadow-2xl">
+      <div class="relative z-10">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to apply, Ana?</h2>
+        <p class="text-xl opacity-95 mb-10 max-w-2xl mx-auto">
+          Submit your profile once. Avança evaluates your potential and connects you to partner banks
+          and universities that can support your funded enrollment.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button class="bg-white text-blue-600 px-10 py-4 rounded-xl text-lg font-bold hover:bg-slate-100 transition shadow-lg">
+            Start Application
+          </button>
+          <a href="#solution" class="bg-white/10 border border-white/30 px-10 py-4 rounded-xl text-lg font-semibold hover:bg-white/15 transition">
+            Review How It Works
+          </a>
+        </div>
+
+        <p class="mt-6 text-sm opacity-80">Pre-registration takes only 10 minutes.</p>
+      </div>
+
+      <div class="absolute -top-10 -left-10 w-44 h-44 bg-white/10 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-10 -right-10 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+  FOOTER
+========================= -->
+<footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
+          <i class="fas fa-chart-line text-white"></i>
+        </div>
+        <div class="text-white font-bold">Avança</div>
+      </div>
+
+      <div class="flex gap-6 text-sm">
+        <a href="#" class="hover:text-white transition">Privacy</a>
+        <a href="#" class="hover:text-white transition">Terms</a>
+        <a href="#" class="hover:text-white transition">FAQ</a>
+        <a href="#" class="hover:text-white transition">Contact</a>
+      </div>
+
+      <div class="flex gap-3">
+        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition text-white">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-pink-600 transition text-white">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-10 text-center text-xs opacity-60">
+      &copy; 2024 Avança Educational Tech S.A. All rights reserved.
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
