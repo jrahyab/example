@@ -1,263 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>AVANÇA ML Engine – Single File Demo</title>
+<head>
+  <meta charset="UTF-8" />
+  <title>Avança ML Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Tailwind CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- React + ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- React -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
-    <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-  </head>
+  <!-- Lucide (Browser, NOT react) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
 
-  <body class="bg-white">
-    <div id="root"></div>
+<body class="bg-white">
+  <div id="root"></div>
 
-    <script type="text/babel">
-      const {
-        BrainCircuit,
-        Cpu,
-        Database,
-        ShieldCheck,
-        GraduationCap,
-        TrendingUp,
-        Search,
-        Zap,
-        Layers,
-        BarChart4,
-        FileSpreadsheet
-      } = lucideReact;
+  <script type="text/babel">
 
-      const { useState, useMemo } = React;
+    const { useState, useMemo } = React;
 
-      const App = () => {
-        const [activeTab, setActiveTab] = useState("demo");
-        const [studentData, setStudentData] = useState({
-          academicScore: 85,
-          psychometricScore: 70,
-          marketDemand: 90,
-          institutionQuality: 80
-        });
+    const App = () => {
+      const [activeTab, setActiveTab] = useState('demo');
+      const [studentData, setStudentData] = useState({
+        academicScore: 85,
+        psychometricScore: 70,
+        marketDemand: 90,
+        institutionQuality: 80
+      });
 
-        const prediction = useMemo(() => {
-          const { academicScore, psychometricScore, marketDemand, institutionQuality } = studentData;
-          const rawScore =
-            academicScore * 0.4 +
-            psychometricScore * 0.25 +
-            marketDemand * 0.2 +
-            institutionQuality * 0.15;
+      const prediction = useMemo(() => {
+        const { academicScore, psychometricScore, marketDemand, institutionQuality } = studentData;
+        const rawScore =
+          academicScore * 0.4 +
+          psychometricScore * 0.25 +
+          marketDemand * 0.2 +
+          institutionQuality * 0.15;
 
-          return {
-            score: Math.round(rawScore),
-            defaultRisk: Math.max(1.5, (100 - rawScore) * 0.12).toFixed(1),
-            salary: (rawScore * 180).toLocaleString("pt-BR"),
-            status: rawScore > 75 ? "Approved" : rawScore > 60 ? "Pending Review" : "High Risk"
-          };
-        }, [studentData]);
+        return {
+          score: Math.round(rawScore),
+          defaultRisk: Math.max(1.5, (100 - rawScore) * 0.12).toFixed(1),
+          salary: (rawScore * 180).toLocaleString('pt-BR'),
+          status: rawScore > 75 ? 'Approved' : rawScore > 60 ? 'Pending Review' : 'High Risk'
+        };
+      }, [studentData]);
 
-        const Slider = ({ label, value, field, Icon, color }) => (
-          <div className="mb-6">
-            <div className="flex justify-between mb-2">
-              <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                <Icon size={14} className={color} /> {label}
-              </label>
-              <span className="font-mono font-bold">{value}%</span>
+      const Slider = ({ label, value, field, icon }) => (
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-2">
+            <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+              <i data-lucide={icon} className="w-4 h-4 text-emerald-500"></i>
+              {label}
+            </label>
+            <span className="font-mono font-bold text-slate-900">{value}%</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={value}
+            onChange={(e) =>
+              setStudentData({ ...studentData, [field]: parseInt(e.target.value) })
+            }
+            className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+          />
+        </div>
+      );
+
+      return (
+        <div className="min-h-screen p-6 font-sans text-slate-900 max-w-7xl mx-auto">
+          <header className="mb-10 border-b pb-8 flex justify-between items-center">
+            <div>
+              <h1 className="text-4xl font-black italic uppercase tracking-tighter">
+                AVANÇA <span className="text-emerald-600">ML Engine</span>
+              </h1>
+              <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
+                Institutional Underwriting Intelligence v2.0
+              </p>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={value}
-              onChange={(e) =>
-                setStudentData({ ...studentData, [field]: parseInt(e.target.value) })
-              }
-              className="w-full accent-emerald-500"
-            />
-          </div>
-        );
 
-        return (
-          <div className="min-h-screen p-6 max-w-7xl mx-auto font-sans">
-            <header className="flex justify-between items-center mb-10 border-b pb-6">
-              <div>
-                <h1 className="text-4xl font-black italic uppercase">
-                  AVANÇA <span className="text-emerald-600">ML Engine</span>
-                </h1>
-                <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
-                  Institutional Underwriting Intelligence v2.0
-                </p>
+            <div className="flex bg-slate-100 p-1.5 rounded-2xl">
+              <button
+                onClick={() => setActiveTab('demo')}
+                className={`px-6 py-2 text-xs font-black uppercase rounded-xl ${
+                  activeTab === 'demo'
+                    ? 'bg-white shadow text-slate-900'
+                    : 'text-slate-400'
+                }`}
+              >
+                Interactive Demo
+              </button>
+              <button
+                onClick={() => setActiveTab('training')}
+                className={`px-6 py-2 text-xs font-black uppercase rounded-xl ${
+                  activeTab === 'training'
+                    ? 'bg-white shadow text-slate-900'
+                    : 'text-slate-400'
+                }`}
+              >
+                Training Process
+              </button>
+            </div>
+          </header>
+
+          {activeTab === 'demo' ? (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+              <div className="lg:col-span-5 bg-slate-50 p-8 rounded-[3rem] border shadow-inner">
+                <h2 className="text-xl font-black uppercase italic mb-8 flex items-center gap-3">
+                  <i data-lucide="search" className="w-6 h-6 text-emerald-500"></i>
+                  Scoring Inputs
+                </h2>
+
+                <Slider label="Academic Merit" field="academicScore" value={studentData.academicScore} icon="graduation-cap" />
+                <Slider label="Psychometric 'Grit' Index" field="psychometricScore" value={studentData.psychometricScore} icon="brain" />
+                <Slider label="Market Specialization ROI" field="marketDemand" value={studentData.marketDemand} icon="trending-up" />
+                <Slider label="Institutional Performance" field="institutionQuality" value={studentData.institutionQuality} icon="shield-check" />
               </div>
 
-              <div className="flex bg-slate-100 rounded-xl p-1">
-                <button
-                  onClick={() => setActiveTab("demo")}
-                  className={`px-6 py-2 text-xs font-black uppercase rounded-lg ${
-                    activeTab === "demo" ? "bg-white shadow" : "text-slate-400"
-                  }`}
-                >
-                  Interactive Demo
-                </button>
-                <button
-                  onClick={() => setActiveTab("training")}
-                  className={`px-6 py-2 text-xs font-black uppercase rounded-lg ${
-                    activeTab === "training" ? "bg-white shadow" : "text-slate-400"
-                  }`}
-                >
-                  Training Process
-                </button>
-              </div>
-            </header>
+              <div className="lg:col-span-7">
+                <div className="bg-slate-900 text-white p-12 rounded-[4rem] border-b-[12px] border-emerald-500 relative">
+                  <i data-lucide="cpu" className="absolute top-10 right-10 w-40 h-40 opacity-5"></i>
 
-            {activeTab === "demo" ? (
-              <div className="grid lg:grid-cols-12 gap-10">
-                <div className="lg:col-span-5 bg-slate-50 p-8 rounded-3xl">
-                  <h2 className="font-black italic uppercase mb-6 flex items-center gap-2">
-                    <Search className="text-emerald-500" /> Scoring Inputs
-                  </h2>
-
-                  <Slider
-                    label="Academic Merit"
-                    value={studentData.academicScore}
-                    field="academicScore"
-                    Icon={GraduationCap}
-                    color="text-blue-500"
-                  />
-                  <Slider
-                    label="Psychometric 'Grit' Index"
-                    value={studentData.psychometricScore}
-                    field="psychometricScore"
-                    Icon={BrainCircuit}
-                    color="text-purple-500"
-                  />
-                  <Slider
-                    label="Market Specialization ROI"
-                    value={studentData.marketDemand}
-                    field="marketDemand"
-                    Icon={TrendingUp}
-                    color="text-emerald-500"
-                  />
-                  <Slider
-                    label="Institutional Performance"
-                    value={studentData.institutionQuality}
-                    field="institutionQuality"
-                    Icon={ShieldCheck}
-                    color="text-orange-500"
-                  />
-
-                  <div className="mt-8 p-4 bg-white rounded-xl text-xs italic">
-                    “Our model predicts the trajectory of the student’s career, making household
-                    credit history statistically irrelevant.”
-                  </div>
-                </div>
-
-                <div className="lg:col-span-7 bg-slate-900 text-white p-10 rounded-3xl">
-                  <div className="flex justify-between mb-8">
-                    <div>
-                      <div className="text-xs uppercase tracking-widest text-emerald-400">
-                        Underwriting Score
-                      </div>
-                      <div className="text-8xl font-black italic font-mono">
-                        {prediction.score}
-                      </div>
-                    </div>
-                    <div className="bg-white/10 px-6 py-4 rounded-xl text-center">
-                      <div className="text-xs uppercase text-slate-400">Status</div>
-                      <div className="text-xl font-black italic text-emerald-400">
-                        {prediction.status}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-6">
-                    <div>
-                      <div className="text-xs uppercase text-slate-400">
-                        Default Risk Probability
-                      </div>
-                      <div className="text-4xl font-mono font-black">
-                        {prediction.defaultRisk}%
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs uppercase text-slate-400">
-                        Projected Year 1 Salary
-                      </div>
-                      <div className="text-2xl font-black text-emerald-400">
-                        R$ {prediction.salary} / year
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-10">
-                <div className="bg-slate-900 text-white p-10 rounded-3xl">
-                  <h2 className="text-2xl font-black italic uppercase mb-6">
-                    The Training Lifecycle
-                  </h2>
-
-                  <div className="grid md:grid-cols-4 gap-4">
-                    {[
-                      {
-                        step: "01",
-                        title: "Synthesis",
-                        desc: "Aggregating 10yr+ historical career data of 15k Brazilian physicians.",
-                        icon: Database,
-                        color: "bg-blue-500"
-                      },
-                      {
-                        step: "02",
-                        title: "Labeling",
-                        desc: "Correlating academic entry features with exit earning and repayment.",
-                        icon: BarChart4,
-                        color: "bg-purple-500"
-                      },
-                      {
-                        step: "03",
-                        title: "Training",
-                        desc: "XGBoost & Neural Net optimization focused on high precision.",
-                        icon: Zap,
-                        color: "bg-emerald-500"
-                      },
-                      {
-                        step: "04",
-                        title: "Validation",
-                        desc: "Blind backtesting against bank loan portfolios.",
-                        icon: ShieldCheck,
-                        color: "bg-orange-500"
-                      }
-                    ].map((p, i) => (
-                      <div key={i} className="bg-slate-800 p-6 rounded-2xl">
-                        <div className={`${p.color} w-10 h-10 rounded-xl flex items-center justify-center mb-4`}>
-                          <p.icon size={20} />
+                  <div className="relative z-10">
+                    <div className="flex justify-between mb-10">
+                      <div>
+                        <div className="text-xs font-black uppercase tracking-widest text-emerald-400">
+                          Underwriting Score
                         </div>
+                        <div className="text-8xl font-black italic font-mono">
+                          {prediction.score}
+                        </div>
+                      </div>
+
+                      <div className="bg-white/10 px-6 py-4 rounded-3xl text-center">
+                        <div className="text-xs uppercase text-slate-400">Status</div>
+                        <div className="text-xl font-black italic text-emerald-400">
+                          {prediction.status}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-10 border-t border-white/10 pt-10">
+                      <div>
                         <div className="text-xs uppercase text-slate-400">
-                          Phase {p.step}
+                          Default Risk Probability
                         </div>
-                        <div className="font-black italic uppercase">
-                          {p.title}
+                        <div className="text-4xl font-black font-mono">
+                          {prediction.defaultRisk}%
                         </div>
-                        <p className="text-xs text-slate-400 mt-2">
-                          {p.desc}
-                        </p>
                       </div>
-                    ))}
+                      <div>
+                        <div className="text-xs uppercase text-slate-400">
+                          Projected Year 1 Salary
+                        </div>
+                        <div className="text-2xl font-black text-emerald-400 italic">
+                          R$ {prediction.salary}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            )}
-          </div>
-        );
-      };
+            </div>
+          ) : (
+            <div className="bg-slate-900 text-white p-12 rounded-[4rem] shadow-2xl">
+              <h2 className="text-2xl font-black italic uppercase mb-8">
+                The Training Lifecycle
+              </h2>
 
-      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-    </script>
-  </body>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {[
+                  ['database', 'Synthesis', 'Aggregating 10+ years of physician career data'],
+                  ['bar-chart', 'Labeling', 'Mapping entry features to earnings & repayment'],
+                  ['zap', 'Training', 'XGBoost & Neural Nets optimized for precision'],
+                  ['shield-check', 'Validation', 'Blind backtesting on real portfolios']
+                ].map(([icon, title, desc], i) => (
+                  <div key={i} className="bg-slate-800 p-6 rounded-2xl">
+                    <i data-lucide={icon} className="w-8 h-8 text-emerald-400 mb-4"></i>
+                    <h3 className="font-black uppercase italic mb-2">{title}</h3>
+                    <p className="text-xs text-slate-400">{desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+    lucide.createIcons();
+  </script>
+</body>
 </html>
