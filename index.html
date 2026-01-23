@@ -15,7 +15,7 @@
   <!-- Babel -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- Lucide (Browser, NOT react) -->
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
@@ -23,8 +23,29 @@
   <div id="root"></div>
 
   <script type="text/babel">
+    const { useState, useMemo, useEffect } = React;
 
-    const { useState, useMemo } = React;
+    const Slider = ({ label, value, field, icon, setStudentData, studentData }) => (
+      <div className="mb-6">
+        <div className="flex justify-between items-center mb-2">
+          <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+            <i data-lucide={icon} className="w-4 h-4 text-emerald-500"></i>
+            {label}
+          </label>
+          <span className="font-mono font-bold text-slate-900">{value}%</span>
+        </div>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={value}
+          onChange={(e) =>
+            setStudentData({ ...studentData, [field]: parseInt(e.target.value) })
+          }
+          className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+        />
+      </div>
+    );
 
     const App = () => {
       const [activeTab, setActiveTab] = useState('demo');
@@ -51,30 +72,13 @@
         };
       }, [studentData]);
 
-      const Slider = ({ label, value, field, icon }) => (
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-2">
-            <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
-              <i data-lucide={icon} className="w-4 h-4 text-emerald-500"></i>
-              {label}
-            </label>
-            <span className="font-mono font-bold text-slate-900">{value}%</span>
-          </div>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={value}
-            onChange={(e) =>
-              setStudentData({ ...studentData, [field]: parseInt(e.target.value) })
-            }
-            className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-          />
-        </div>
-      );
+      useEffect(() => {
+        lucide.createIcons();
+      });
 
       return (
         <div className="min-h-screen p-6 font-sans text-slate-900 max-w-7xl mx-auto">
+          {/* HEADER */}
           <header className="mb-10 border-b pb-8 flex justify-between items-center">
             <div>
               <h1 className="text-4xl font-black italic uppercase tracking-tighter">
@@ -109,20 +113,23 @@
             </div>
           </header>
 
+          {/* CONTENT */}
           {activeTab === 'demo' ? (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+              {/* INPUTS */}
               <div className="lg:col-span-5 bg-slate-50 p-8 rounded-[3rem] border shadow-inner">
                 <h2 className="text-xl font-black uppercase italic mb-8 flex items-center gap-3">
-                  <i data-lucide="search" className="w-6 h-6 text-emerald-500"></i>
+                  <i data-lucide="sliders" className="w-6 h-6 text-emerald-500"></i>
                   Scoring Inputs
                 </h2>
 
-                <Slider label="Academic Merit" field="academicScore" value={studentData.academicScore} icon="graduation-cap" />
-                <Slider label="Psychometric 'Grit' Index" field="psychometricScore" value={studentData.psychometricScore} icon="brain" />
-                <Slider label="Market Specialization ROI" field="marketDemand" value={studentData.marketDemand} icon="trending-up" />
-                <Slider label="Institutional Performance" field="institutionQuality" value={studentData.institutionQuality} icon="shield-check" />
+                <Slider label="Academic Merit" field="academicScore" value={studentData.academicScore} icon="graduation-cap" setStudentData={setStudentData} studentData={studentData} />
+                <Slider label="Psychometric 'Grit' Index" field="psychometricScore" value={studentData.psychometricScore} icon="brain" setStudentData={setStudentData} studentData={studentData} />
+                <Slider label="Market Specialization ROI" field="marketDemand" value={studentData.marketDemand} icon="trending-up" setStudentData={setStudentData} studentData={studentData} />
+                <Slider label="Institutional Performance" field="institutionQuality" value={studentData.institutionQuality} icon="shield-check" setStudentData={setStudentData} studentData={studentData} />
               </div>
 
+              {/* OUTPUT */}
               <div className="lg:col-span-7">
                 <div className="bg-slate-900 text-white p-12 rounded-[4rem] border-b-[12px] border-emerald-500 relative">
                   <i data-lucide="cpu" className="absolute top-10 right-10 w-40 h-40 opacity-5"></i>
@@ -169,22 +176,59 @@
               </div>
             </div>
           ) : (
+            /* TRAINING LIFECYCLE */
             <div className="bg-slate-900 text-white p-12 rounded-[4rem] shadow-2xl">
-              <h2 className="text-2xl font-black italic uppercase mb-8">
-                The Training Lifecycle
-              </h2>
+              <div className="mb-10">
+                <h2 className="text-3xl font-black italic uppercase">
+                  The Training Lifecycle
+                </h2>
+                <p className="text-xs font-bold uppercase tracking-widest text-emerald-400 mt-2">
+                  From historical data to real-time decisions
+                </p>
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {[
-                  ['database', 'Synthesis', 'Aggregating 10+ years of physician career data'],
-                  ['bar-chart', 'Labeling', 'Mapping entry features to earnings & repayment'],
-                  ['zap', 'Training', 'XGBoost & Neural Nets optimized for precision'],
-                  ['shield-check', 'Validation', 'Blind backtesting on real portfolios']
-                ].map(([icon, title, desc], i) => (
-                  <div key={i} className="bg-slate-800 p-6 rounded-2xl">
-                    <i data-lucide={icon} className="w-8 h-8 text-emerald-400 mb-4"></i>
-                    <h3 className="font-black uppercase italic mb-2">{title}</h3>
-                    <p className="text-xs text-slate-400">{desc}</p>
+                  {
+                    phase: 'PHASE 01',
+                    icon: 'database',
+                    title: 'Synthesis',
+                    desc: 'Aggregating 10yr+ historical career data of 15k Brazilian physicians.'
+                  },
+                  {
+                    phase: 'PHASE 02',
+                    icon: 'bar-chart-3',
+                    title: 'Labeling',
+                    desc: "Correlating academic 'entry' features with 'exit' earning and repayment."
+                  },
+                  {
+                    phase: 'PHASE 03',
+                    icon: 'zap',
+                    title: 'Training',
+                    desc: 'XGBoost & Neural Net optimization focused on high-precision low-recall.'
+                  },
+                  {
+                    phase: 'PHASE 04',
+                    icon: 'shield-check',
+                    title: 'Validation',
+                    desc: 'Blind backtesting against current bank loan portfolios to verify lift.'
+                  }
+                ].map((item, i) => (
+                  <div key={i} className="bg-slate-800/80 p-8 rounded-3xl border border-white/5">
+                    <div className="flex items-center justify-between mb-6">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        {item.phase}
+                      </span>
+                      <i data-lucide={item.icon} className="w-6 h-6 text-emerald-400"></i>
+                    </div>
+
+                    <h3 className="text-lg font-black uppercase italic mb-3">
+                      {item.title}
+                    </h3>
+
+                    <p className="text-xs leading-relaxed text-slate-400">
+                      {item.desc}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -195,8 +239,6 @@
     };
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-
-    lucide.createIcons();
   </script>
 </body>
 </html>
