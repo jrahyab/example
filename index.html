@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Avança Tech — Capital, Economics & Scale</title>
+  <title>Avança Tech — Capital, Economics & ML Engine</title>
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -47,7 +47,7 @@
 
       const ltvRatio = (ltv / inputs.coca).toFixed(1);
 
-      /* ================= UPDATED DE FINANCIAL MODEL ================= */
+      /* ================= FINANCIAL PROJECTIONS ================= */
       const years = [1, 2, 3, 4, 5];
       const revenueData = [0.4, 1.5, 4.5, 8.0, 14.0];   // R$ Millions
       const cashFlowData = [-1.2, -1.0, 0.5, 2.5, 5.0]; // R$ Millions
@@ -65,22 +65,33 @@
         });
       }, []);
 
-      /* ================= CHART HELPERS ================= */
-      const chartHeight = 350;
-      const chartWidth = 800;
-      const padding = 60;
+      /* ================= ML ENGINE ================= */
+      const [activeTab, setActiveTab] = useState('demo');
+      const [studentData, setStudentData] = useState({
+        academicScore: 85,
+        psychometricScore: 70,
+        marketDemand: 90,
+        institutionQuality: 80
+      });
 
-      const allValues = projections.flatMap(d => [d.revenue, d.cashFlow, d.cumCash]);
-      const maxVal = Math.max(...allValues.map(Math.abs));
+      const prediction = useMemo(() => {
+        const { academicScore, psychometricScore, marketDemand, institutionQuality } = studentData;
+        const rawScore =
+          academicScore * 0.4 +
+          psychometricScore * 0.25 +
+          marketDemand * 0.2 +
+          institutionQuality * 0.15;
 
-      const getY = (val) =>
-        chartHeight * 0.5 - (val / maxVal) * (chartHeight * 0.4);
+        const probabilityOfDefault = Math.max(1.5, (100 - rawScore) * 0.12).toFixed(1);
+        const estStartingSalary = (rawScore * 180).toLocaleString('pt-BR');
 
-      const getX = (i) =>
-        padding + (i * (chartWidth - 2 * padding)) / 4;
-
-      const getPath = (key) =>
-        projections.map((d, i) => `${getX(i)},${getY(d[key])}`).join(" ");
+        return {
+          score: Math.round(rawScore),
+          defaultRisk: probabilityOfDefault,
+          salary: estStartingSalary,
+          status: rawScore > 75 ? 'Approved' : rawScore > 60 ? 'Pending Review' : 'High Risk'
+        };
+      }, [studentData]);
 
       useEffect(() => {
         lucide.createIcons();
@@ -92,49 +103,17 @@
           {/* ================= HERO ================= */}
           <header className="bg-slate-900 text-white py-16 text-center">
             <div className="inline-block px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
-              Capital-Light AI Marketplace
+              Capital-Light AI Infrastructure
             </div>
             <h1 className="text-4xl md:text-5xl font-black mb-4">
               AVANÇA <span className="text-emerald-500 italic">TECH</span>
             </h1>
             <p className="text-slate-400 max-w-3xl mx-auto">
-              Infrastructure that unlocks bank capital for high-potential students —
-              without financing tuition.
+              ML-powered underwriting infrastructure that unlocks bank capital for high-potential students — without financing tuition.
             </p>
           </header>
 
           <main className="max-w-6xl mx-auto -mt-12 px-4 space-y-20">
-
-            {/* ================= BUILD CAPITAL ================= */}
-            <section className="bg-slate-900 text-white rounded-3xl p-10 shadow-xl">
-              <h2 className="text-xl font-black text-center mb-8 uppercase">
-                Technology Build Capital
-              </h2>
-              <div className="grid md:grid-cols-4 gap-6 items-center">
-                <div className="md:col-span-3 space-y-4">
-                  {[
-                    ["Venture Capital", "ML, data, platform scale", "trending-up"],
-                    ["Strategic Banks", "Pilots & innovation budgets", "landmark"],
-                    ["Impact Capital", "Education & inclusion", "zap"],
-                    ["Grants", "Non-dilutive R&D funding", "check-circle"]
-                  ].map(([t, d, i], idx) => (
-                    <div key={idx} className="bg-slate-800 p-4 rounded-xl flex gap-4">
-                      <Icon name={i} className="w-5 h-5 text-emerald-400" />
-                      <div>
-                        <div className="font-bold text-sm">{t}</div>
-                        <div className="text-xs text-slate-400">{d}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex justify-center">
-                  <div className="w-36 h-36 bg-slate-950 rounded-full border-4 border-emerald-500 flex flex-col items-center justify-center">
-                    <Icon name="cpu" className="w-7 h-7 text-emerald-400 mb-2" />
-                    <div className="font-black text-xs">AVANÇA ML</div>
-                  </div>
-                </div>
-              </div>
-            </section>
 
             {/* ================= CAPITAL FLOW ================= */}
             <section className="bg-white rounded-3xl p-10 shadow-xl border">
@@ -147,7 +126,7 @@
                   ["① Bank", "Pays tuition + R$2,500 tech fee", "landmark"],
                   ["② University", "Receives tuition + pays R$1,500 fee", "graduation-cap"],
                   ["③ Student", "Studies → repays loan", "users"],
-                  ["④ Bank", "Capital returns + interest", "arrow-right"]
+                  ["④ Bank", "Capital returns + interest", "repeat"]
                 ].map(([t, d, i], idx) => (
                   <div key={idx} className={`w-full max-w-xl p-6 rounded-xl flex justify-between items-center ${idx === 3 ? 'bg-slate-900 text-white border-emerald-500 border-4' : 'bg-slate-50 border'}`}>
                     <div>
@@ -158,39 +137,8 @@
                   </div>
                 ))}
                 <div className="text-xs text-slate-500 italic flex items-center gap-2">
-                  <Icon name="repeat" className="w-4 h-4" />
+                  <Icon name="refresh-cw" className="w-4 h-4" />
                   Lifecycle repeats at scale
-                </div>
-              </div>
-            </section>
-
-            {/* ================= ECOSYSTEM ================= */}
-            <section className="bg-white rounded-3xl p-10 shadow-xl border">
-              <h2 className="text-xl font-black text-center mb-10 uppercase">
-                ML-Powered Ecosystem
-              </h2>
-
-              <div className="flex flex-col md:flex-row justify-around items-center gap-10">
-                <div className="w-56 h-56 bg-slate-900 rounded-full border-8 border-emerald-500 flex flex-col items-center justify-center text-white">
-                  <Icon name="cpu" className="w-10 h-10 text-emerald-400 mb-2" />
-                  <div className="font-black">AVANÇA ML</div>
-                  <div className="text-[10px] opacity-70 uppercase">Risk Engine</div>
-                </div>
-
-                <div className="space-y-4 w-60">
-                  {[
-                    ["Banks", "Capital", "landmark"],
-                    ["Students", "Potential", "users"],
-                    ["Universities", "Degrees", "graduation-cap"]
-                  ].map(([l, d, i], idx) => (
-                    <div key={idx} className="flex gap-4 items-center bg-slate-50 border p-4 rounded-xl">
-                      <Icon name={i} className="w-5 h-5" />
-                      <div>
-                        <div className="font-bold text-sm">{l}</div>
-                        <div className="text-xs text-slate-500">{d}</div>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </div>
             </section>
@@ -230,26 +178,94 @@
               </div>
             </section>
 
-            {/* ================= UPDATED DE FINANCIAL CANVAS ================= */}
+            {/* ================= ML ENGINE ================= */}
+            <section className="bg-white rounded-3xl p-10 shadow-xl border">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-xl font-black uppercase">Avança ML Engine</h2>
+                <div className="flex bg-slate-100 p-1 rounded-xl">
+                  {['demo','training'].map(tab => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-6 py-2 text-xs font-black uppercase rounded-lg ${activeTab===tab ? 'bg-white shadow' : 'text-slate-400'}`}
+                    >
+                      {tab === 'demo' ? 'Interactive Demo' : 'Training Process'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {activeTab === 'demo' ? (
+                <div className="grid md:grid-cols-2 gap-10">
+                  <div className="space-y-6">
+                    {[
+                      ["Academic Merit","academicScore"],
+                      ["Psychometric Index","psychometricScore"],
+                      ["Market Demand","marketDemand"],
+                      ["Institution Quality","institutionQuality"]
+                    ].map(([label, key]) => (
+                      <div key={key}>
+                        <label className="text-xs font-bold text-slate-500">{label}</label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={studentData[key]}
+                          onChange={e => setStudentData({...studentData,[key]:+e.target.value})}
+                          className="w-full accent-emerald-500"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="bg-slate-900 text-white rounded-3xl p-10">
+                    <div className="text-[10px] uppercase text-emerald-400 font-black">Underwriting Score</div>
+                    <div className="text-7xl font-black italic">{prediction.score}</div>
+                    <div className="mt-6 grid grid-cols-2 gap-6 text-sm">
+                      <div>
+                        <div className="text-slate-400 text-xs">Default Risk</div>
+                        <div className="text-2xl font-black">{prediction.defaultRisk}%</div>
+                      </div>
+                      <div>
+                        <div className="text-slate-400 text-xs">Est. Salary</div>
+                        <div className="text-xl font-black text-emerald-400">R$ {prediction.salary}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-slate-600 text-sm">
+                  Training pipeline, validation, and dataset walkthrough shown in technical deck.
+                </p>
+              )}
+            </section>
+
+            {/* ================= FINANCIAL PROJECTIONS ================= */}
             <section className="bg-white rounded-3xl p-10 shadow-xl border">
               <h2 className="text-xl font-black mb-6 uppercase">
-                Avanca Financial Model (Projection) (R$ Millions)
+                Financial Projections (R$ Millions)
               </h2>
 
-              <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full">
-                <line x1={padding} y1={getY(0)} x2={chartWidth-padding} y2={getY(0)} stroke="#cbd5e1" strokeDasharray="6" />
-                <polyline fill="none" stroke="#10b981" strokeWidth="6" points={getPath("revenue")} />
-                <polyline fill="none" stroke="#f43f5e" strokeWidth="6" points={getPath("cashFlow")} />
-                <polyline fill="none" stroke="#9333ea" strokeWidth="8" points={getPath("cumCash")} />
-
-                {projections.map((p,i)=>(
-                  <g key={i}>
-                    <text x={getX(i)} y={chartHeight-10} textAnchor="middle" className="fill-slate-400 text-xs font-black italic">
-                      {p.year}
-                    </text>
-                    <circle cx={getX(i)} cy={getY(p.cumCash)} r="6" fill="#9333ea" stroke="white" strokeWidth="3"/>
-                  </g>
-                ))}
+              <svg viewBox="0 0 800 350" className="w-full">
+                {(() => {
+                  const pad = 60, h = 350, w = 800;
+                  const vals = projections.flatMap(p => [p.revenue,p.cashFlow,p.cumCash]);
+                  const max = Math.max(...vals.map(Math.abs));
+                  const X = i => pad + i*(w-2*pad)/4;
+                  const Y = v => h/2 - (v/max)*(h*0.4);
+                  const path = k => projections.map((p,i)=>`${X(i)},${Y(p[k])}`).join(" ");
+                  return (
+                    <>
+                      <line x1={pad} y1={Y(0)} x2={w-pad} y2={Y(0)} stroke="#cbd5e1" strokeDasharray="6"/>
+                      <polyline fill="none" stroke="#10b981" strokeWidth="6" points={path("revenue")}/>
+                      <polyline fill="none" stroke="#f43f5e" strokeWidth="6" points={path("cashFlow")}/>
+                      <polyline fill="none" stroke="#9333ea" strokeWidth="8" points={path("cumCash")}/>
+                      {projections.map((p,i)=>(
+                        <text key={i} x={X(i)} y={h-10} textAnchor="middle" className="fill-slate-400 text-xs font-black">{p.year}</text>
+                      ))}
+                    </>
+                  );
+                })()}
               </svg>
             </section>
 
