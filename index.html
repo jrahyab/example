@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Avança Tech — Capital, Ecosystem & Unit Economics</title>
+  <title>Avança Tech — Capital, Economics & Scale</title>
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -22,70 +22,110 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useMemo } = React;
 
     function Icon({ name, className }) {
       return <i data-lucide={name} className={className}></i>;
     }
 
     function App() {
+
+      /* ================= UNIT ECON INPUTS ================= */
       const [inputs, setInputs] = useState({
         bankFee: 2500,
         uniFee: 1500,
         serviceFee: 0.015,
-        avgSalary: 18000,
         repaymentTerm: 120,
+        monthlyPayment: 1200,
         coca: 800
       });
 
-      const totalOneTimeFees = inputs.bankFee + inputs.uniFee;
-      const monthlyServiceFee = inputs.avgSalary * inputs.serviceFee;
-      const lifetimeServiceFees = monthlyServiceFee * inputs.repaymentTerm;
-      const ltv = Math.round(totalOneTimeFees + lifetimeServiceFees);
-      const ratio = (ltv / inputs.coca).toFixed(1);
+      const ltv =
+        inputs.bankFee +
+        inputs.uniFee +
+        inputs.monthlyPayment * inputs.serviceFee * inputs.repaymentTerm;
+
+      const ltvRatio = (ltv / inputs.coca).toFixed(1);
+
+      /* ================= DE FINANCIAL CANVAS ================= */
+      const [banksOnboarded, setBanksOnboarded] = useState(6);
+      const [fundingVelocity, setFundingVelocity] = useState(2.2);
+      const initialInvestment = 1200000;
+
+      const deUnit = {
+        avgBankFee: 250000,
+        studentFee: 1500,
+        studentsPerBank: 400,
+        opexBase: 600000
+      };
+
+      const projections = useMemo(() => {
+        let data = [];
+        let runningCash = initialInvestment;
+
+        for (let year = 1; year <= 5; year++) {
+          const activeBanks = Math.max(
+            1,
+            Math.round((banksOnboarded / 5) * year * (fundingVelocity / 2.2))
+          );
+
+          const students = activeBanks * deUnit.studentsPerBank;
+          const revenue =
+            activeBanks * deUnit.avgBankFee +
+            students * deUnit.studentFee;
+
+          const costs = deUnit.opexBase * Math.pow(1.25, year - 1);
+          const cashFlow = revenue - costs;
+          runningCash += cashFlow;
+
+          data.push({
+            year: `Year ${year}`,
+            revenue,
+            cashFlow,
+            cumCash: runningCash
+          });
+        }
+        return data;
+      }, [banksOnboarded, fundingVelocity]);
 
       useEffect(() => {
         lucide.createIcons();
       });
 
+      /* ================= RENDER ================= */
       return (
-        <div className="min-h-screen font-sans text-slate-900 pb-32">
+        <div className="font-sans text-slate-900 pb-32">
 
-          {/* ================= HERO ================= */}
-          <header className="bg-slate-900 text-white py-16 px-4">
-            <div className="max-w-6xl mx-auto text-center">
-              <div className="inline-flex px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold mb-6 uppercase tracking-widest border border-emerald-500/30">
-                Capital-Light Marketplace
-              </div>
-              <h1 className="text-4xl md:text-5xl font-black mb-4">
-                AVANÇA <span className="text-emerald-500 italic">TECH</span>
-              </h1>
-              <p className="text-lg text-slate-400 max-w-3xl mx-auto">
-                The intelligent infrastructure connecting banks, universities, and high-potential students through ML-driven risk underwriting.
-              </p>
+          {/* HERO */}
+          <header className="bg-slate-900 text-white py-16 text-center">
+            <div className="inline-block px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
+              Capital-Light AI Marketplace
             </div>
+            <h1 className="text-4xl md:text-5xl font-black mb-4">
+              AVANÇA <span className="text-emerald-500 italic">TECH</span>
+            </h1>
+            <p className="text-slate-400 max-w-3xl mx-auto">
+              Infrastructure that unlocks bank capital for high-potential students —
+              without financing tuition.
+            </p>
           </header>
 
-          <main className="max-w-6xl mx-auto -mt-14 px-4 space-y-20">
+          <main className="max-w-6xl mx-auto -mt-12 px-4 space-y-20">
 
-            {/* ================= BUILD CAPITAL ================= */}
-            <section className="bg-slate-900 rounded-[2.5rem] shadow-2xl p-12 border border-slate-800 text-white">
-              <h2 className="text-2xl font-black text-center mb-4 uppercase">
+            {/* BUILD CAPITAL */}
+            <section className="bg-slate-900 text-white rounded-3xl p-10 shadow-xl">
+              <h2 className="text-xl font-black text-center mb-8 uppercase">
                 Technology Build Capital
               </h2>
-              <p className="text-center text-slate-400 text-sm mb-10 max-w-2xl mx-auto">
-                Before the marketplace operates, Avança raises catalytic capital to build its proprietary ML underwriting engine.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
-                <div className="space-y-4 md:col-span-3">
+              <div className="grid md:grid-cols-4 gap-6 items-center">
+                <div className="md:col-span-3 space-y-4">
                   {[
-                    ["Venture Capital", "Funds ML, hiring, and platform scale", "trending-up"],
-                    ["Strategic Partners", "Banks via pilots & innovation budgets", "landmark"],
-                    ["Impact & Development Capital", "Education access & financial inclusion", "hand-coins"],
-                    ["Grants & Non-Dilutive Funding", "AI, fintech & gov innovation programs", "shield-check"]
+                    ["Venture Capital", "ML, data, platform scale", "trending-up"],
+                    ["Strategic Banks", "Pilots & innovation budgets", "landmark"],
+                    ["Impact Capital", "Education & inclusion", "hand-coins"],
+                    ["Grants", "Non-dilutive R&D funding", "shield-check"]
                   ].map(([t, d, i], idx) => (
-                    <div key={idx} className="flex items-center gap-4 bg-slate-800 p-4 rounded-2xl border border-slate-700">
+                    <div key={idx} className="bg-slate-800 p-4 rounded-xl flex gap-4">
                       <Icon name={i} className="w-5 h-5 text-emerald-400" />
                       <div>
                         <div className="font-bold text-sm">{t}</div>
@@ -94,205 +134,156 @@
                     </div>
                   ))}
                 </div>
-
                 <div className="flex justify-center">
-                  <div className="w-40 h-40 bg-slate-950 rounded-full flex flex-col items-center justify-center border-4 border-emerald-500 shadow-xl">
-                    <Icon name="cpu" className="w-8 h-8 text-emerald-400 mb-2" />
-                    <div className="font-black text-sm">AVANÇA ML</div>
-                    <div className="text-[10px] opacity-70 uppercase text-center px-2">
-                      Built with Risk Capital
-                    </div>
+                  <div className="w-36 h-36 bg-slate-950 rounded-full border-4 border-emerald-500 flex flex-col items-center justify-center">
+                    <Icon name="cpu" className="w-7 h-7 text-emerald-400 mb-2" />
+                    <div className="font-black text-xs">AVANÇA ML</div>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* ================= CLEAR CAPITAL FLOW ================= */}
-<section className="bg-white rounded-[2.5rem] shadow-2xl p-12 border">
-  <h2 className="text-2xl font-black text-center mb-3 uppercase tracking-tight">
-    Capital Flow — One Student Lifecycle
-  </h2>
-  <p className="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
-    Follow a single student from loan origination to repayment.
-    This sequence repeats at scale across the platform.
-  </p>
-
-  <div className="flex flex-col items-center space-y-8">
-
-    {/* STEP 1 */}
-    <div className="w-full max-w-xl bg-slate-50 border rounded-2xl p-6 flex items-start gap-4">
-      <div className="w-8 h-8 rounded-full bg-emerald-500 text-white font-black flex items-center justify-center">
-        ①
-      </div>
-      <div className="flex-1">
-        <div className="font-black text-lg">Bank</div>
-        <div className="text-sm text-slate-600 mt-1">
-          Deploys loan capital to fund tuition
-        </div>
-        <div className="mt-3 text-xs bg-emerald-50 text-emerald-700 inline-block px-3 py-1 rounded-full font-bold">
-          Pays tuition + R$2,500 Avança tech fee
-        </div>
-      </div>
-      <Icon name="landmark" className="w-6 h-6 text-slate-400" />
-    </div>
-
-    <Icon name="arrow-down" className="w-6 h-6 text-slate-300" />
-
-    {/* STEP 2 */}
-    <div className="w-full max-w-xl bg-slate-50 border rounded-2xl p-6 flex items-start gap-4">
-      <div className="w-8 h-8 rounded-full bg-emerald-500 text-white font-black flex items-center justify-center">
-        ②
-      </div>
-      <div className="flex-1">
-        <div className="font-black text-lg">University</div>
-        <div className="text-sm text-slate-600 mt-1">
-          Receives tuition and educates the student
-        </div>
-        <div className="mt-3 text-xs bg-emerald-50 text-emerald-700 inline-block px-3 py-1 rounded-full font-bold">
-          Pays R$1,500 placement fee to Avança
-        </div>
-      </div>
-      <Icon name="graduation-cap" className="w-6 h-6 text-slate-400" />
-    </div>
-
-    <Icon name="arrow-down" className="w-6 h-6 text-slate-300" />
-
-    {/* STEP 3 */}
-    <div className="w-full max-w-xl bg-slate-50 border rounded-2xl p-6 flex items-start gap-4">
-      <div className="w-8 h-8 rounded-full bg-emerald-500 text-white font-black flex items-center justify-center">
-        ③
-      </div>
-      <div className="flex-1">
-        <div className="font-black text-lg">Student (Ana)</div>
-        <div className="text-sm text-slate-600 mt-1">
-          Completes education and enters the workforce
-        </div>
-        <div className="mt-3 text-xs bg-emerald-50 text-emerald-700 inline-block px-3 py-1 rounded-full font-bold">
-          Repays loan over time
-        </div>
-      </div>
-      <Icon name="users" className="w-6 h-6 text-slate-400" />
-    </div>
-
-    <Icon name="arrow-down" className="w-6 h-6 text-slate-300" />
-
-    {/* STEP 4 */}
-    <div className="w-full max-w-xl bg-slate-900 border-4 border-emerald-500/40 rounded-2xl p-6 flex items-start gap-4 text-white shadow-xl">
-      <div className="w-8 h-8 rounded-full bg-emerald-500 text-slate-900 font-black flex items-center justify-center">
-        ④
-      </div>
-      <div className="flex-1">
-        <div className="font-black text-lg">Bank (Capital Returns)</div>
-        <div className="text-sm text-slate-300 mt-1">
-          Loan principal and interest return with lower default risk
-        </div>
-        <div className="mt-3 text-xs bg-emerald-500/20 text-emerald-400 inline-block px-3 py-1 rounded-full font-bold">
-          Avança takes 1.5% repayment commission
-        </div>
-      </div>
-      <Icon name="repeat" className="w-6 h-6 text-emerald-400" />
-    </div>
-
-    {/* LOOP NOTE */}
-    <div className="mt-6 text-center text-xs text-slate-500 italic flex items-center gap-2">
-      <Icon name="refresh-cw" className="w-4 h-4" />
-      This lifecycle repeats across thousands of students, compounding platform revenue
-    </div>
-
-  </div>
-</section>
-
-
-            {/* ================= ECOSYSTEM ================= */}
-            <section className="bg-white rounded-[2.5rem] shadow-2xl p-12 border">
-              <h2 className="text-2xl font-black text-center mb-10 flex justify-center items-center gap-2">
-                <Icon name="cpu" className="w-6 h-6 text-blue-600" />
-                The ML-Powered Ecosystem
+            {/* CAPITAL FLOW */}
+            <section className="bg-white rounded-3xl p-10 shadow-xl border">
+              <h2 className="text-xl font-black text-center mb-10 uppercase">
+                Capital Flow — One Student Lifecycle
               </h2>
 
-              <div className="flex flex-col md:flex-row items-center justify-around gap-10">
-                <div className="w-64 h-64 bg-slate-900 rounded-full flex flex-col items-center justify-center text-white border-8 border-emerald-500 shadow-2xl relative">
-                  <div className="absolute -top-4 bg-emerald-500 text-xs font-bold px-3 py-1 rounded-full text-slate-900 uppercase">
-                    Our Moat
+              <div className="flex flex-col items-center space-y-8">
+                {[
+                  ["① Bank", "Pays tuition + R$2,500 tech fee", "landmark"],
+                  ["② University", "Receives tuition + pays R$1,500 fee", "graduation-cap"],
+                  ["③ Student", "Studies → repays loan", "users"],
+                  ["④ Bank", "Capital returns + interest", "repeat"]
+                ].map(([t, d, i], idx) => (
+                  <div key={idx} className={`w-full max-w-xl p-6 rounded-xl flex justify-between items-center ${idx === 3 ? 'bg-slate-900 text-white border-emerald-500 border-4' : 'bg-slate-50 border'}`}>
+                    <div>
+                      <div className="font-black">{t}</div>
+                      <div className="text-sm opacity-70">{d}</div>
+                    </div>
+                    <Icon name={i} className="w-6 h-6 opacity-50" />
                   </div>
-                  <Icon name="cpu" className="w-12 h-12 text-emerald-400 mb-2 animate-pulse" />
+                ))}
+                <div className="text-xs text-slate-500 italic flex items-center gap-2">
+                  <Icon name="refresh-cw" className="w-4 h-4" />
+                  Lifecycle repeats at scale
+                </div>
+              </div>
+            </section>
+
+            {/* ECOSYSTEM */}
+            <section className="bg-white rounded-3xl p-10 shadow-xl border">
+              <h2 className="text-xl font-black text-center mb-10 uppercase">
+                ML-Powered Ecosystem
+              </h2>
+
+              <div className="flex flex-col md:flex-row justify-around items-center gap-10">
+                <div className="w-56 h-56 bg-slate-900 rounded-full border-8 border-emerald-500 flex flex-col items-center justify-center text-white">
+                  <Icon name="cpu" className="w-10 h-10 text-emerald-400 mb-2" />
                   <div className="font-black">AVANÇA ML</div>
-                  <div className="text-[10px] opacity-70 uppercase">Underwriting Engine</div>
+                  <div className="text-[10px] opacity-70 uppercase">Risk Engine</div>
                 </div>
 
-                <div className="flex flex-col gap-6 w-64">
+                <div className="space-y-4 w-60">
                   {[
-                    ["Banks", "Provides the Capital", "landmark"],
-                    ["Students", "Provides the Potential", "users"],
-                    ["Universities", "Provides the Degree", "graduation-cap"]
+                    ["Banks", "Capital", "landmark"],
+                    ["Students", "Potential", "users"],
+                    ["Universities", "Degrees", "graduation-cap"]
                   ].map(([l, d, i], idx) => (
-                    <div key={idx} className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border">
+                    <div key={idx} className="flex gap-4 items-center bg-slate-50 border p-4 rounded-xl">
                       <Icon name={i} className="w-5 h-5" />
                       <div>
                         <div className="font-bold text-sm">{l}</div>
                         <div className="text-xs text-slate-500">{d}</div>
                       </div>
-                      <Icon name="check-circle" className="w-4 h-4 text-emerald-500 ml-auto" />
                     </div>
                   ))}
                 </div>
               </div>
             </section>
 
-            {/* ================= UNIT ECONOMICS ================= */}
-            <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              <div className="lg:col-span-4 bg-white rounded-3xl p-8 shadow-xl border">
-                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-                  <Icon name="calculator" className="w-5 h-5 text-blue-600" />
-                  Economics Config
-                </h3>
-
+            {/* UNIT ECONOMICS */}
+            <section className="grid md:grid-cols-2 gap-8">
+              <div className="bg-white p-8 rounded-3xl shadow border">
+                <h3 className="font-black mb-6 uppercase">Unit Economics</h3>
                 {[
-                  ["Bank Tech Fee (R$)", "bankFee"],
-                  ["Uni Referral Fee (R$)", "uniFee"],
-                  ["Service Fee (%)", "serviceFee", 0.005],
-                  ["COCA (R$)", "coca"]
-                ].map(([l, k, s], i) => (
-                  <div key={i} className="mb-4">
-                    <label className="text-[10px] uppercase font-black text-slate-400">{l}</label>
+                  ["Bank Tech Fee", "bankFee"],
+                  ["University Fee", "uniFee"],
+                  ["Monthly Payment", "monthlyPayment"],
+                  ["Commission %", "serviceFee"],
+                  ["COCA", "coca"]
+                ].map(([l, k]) => (
+                  <div key={k} className="mb-4">
+                    <label className="text-[10px] uppercase font-bold text-slate-400">{l}</label>
                     <input
                       type="number"
-                      step={s || 1}
                       value={inputs[k]}
                       onChange={e => setInputs({ ...inputs, [k]: Number(e.target.value) })}
-                      className="w-full mt-1 bg-slate-50 border rounded-xl p-3 text-sm font-bold"
+                      className="w-full mt-1 p-2 border rounded-lg"
                     />
                   </div>
                 ))}
               </div>
 
-              <div className="lg:col-span-8 bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative">
-                <div className="absolute bottom-0 right-0 opacity-5">
-                  <Icon name="bar-chart-3" className="w-64 h-64" />
+              <div className="bg-slate-900 text-white rounded-3xl p-8 flex flex-col justify-center items-center shadow">
+                <div className="text-[10px] uppercase text-slate-400 mb-2">LTV</div>
+                <div className="text-4xl font-black text-emerald-400 mb-6">
+                  R$ {Math.round(ltv).toLocaleString()}
                 </div>
-
-                <div className="relative z-10">
-                  <h3 className="text-2xl font-black italic mb-8">UNIT METRICS</h3>
-
-                  <div className="grid md:grid-cols-2 gap-10">
-                    <div>
-                      <p className="text-[10px] uppercase text-slate-500 font-bold">COCA</p>
-                      <div className="text-4xl font-black">R$ {inputs.coca.toLocaleString()}</div>
-
-                      <p className="mt-6 text-[10px] uppercase text-slate-500 font-bold">LTV</p>
-                      <div className="text-4xl font-black text-emerald-400">
-                        R$ {ltv.toLocaleString()}
-                      </div>
-                    </div>
-
-                    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col items-center justify-center">
-                      <div className="text-7xl font-black text-emerald-400">{ratio}x</div>
-                      <div className="text-xs uppercase tracking-widest opacity-60">
-                        LTV : COCA
-                      </div>
-                    </div>
-                  </div>
+                <div className="text-[10px] uppercase text-slate-400 mb-2">LTV : COCA</div>
+                <div className="text-6xl font-black text-emerald-400">
+                  {ltvRatio}x
                 </div>
+              </div>
+            </section>
+
+            {/* DE FINANCIAL CANVAS */}
+            <section className="bg-white rounded-3xl p-10 shadow-xl border">
+              <h2 className="text-xl font-black mb-6 uppercase">
+                Disciplined Entrepreneurship — Financial Canvas
+              </h2>
+
+              <svg viewBox="0 0 700 300" className="w-full">
+                {(() => {
+                  const pad = 50;
+                  const h = 300;
+                  const w = 700;
+                  const vals = projections.flatMap(p => [p.revenue, p.cashFlow, p.cumCash]);
+                  const max = Math.max(...vals.map(Math.abs));
+
+                  const X = i => pad + i * (w - pad * 2) / 4;
+                  const Y = v => h / 2 - (v / max) * h * 0.4;
+                  const path = k => projections.map((p, i) => `${X(i)},${Y(p[k])}`).join(" ");
+
+                  return (
+                    <>
+                      <line x1={pad} y1={Y(0)} x2={w - pad} y2={Y(0)} stroke="#e5e7eb" strokeDasharray="4" />
+                      <polyline fill="none" stroke="#10b981" strokeWidth="4" points={path("revenue")} />
+                      <polyline fill="none" stroke="#f43f5e" strokeWidth="4" points={path("cashFlow")} />
+                      <polyline fill="none" stroke="#9333ea" strokeWidth="5" points={path("cumCash")} />
+                      {projections.map((p, i) => (
+                        <text key={i} x={X(i)} y={h - 10} textAnchor="middle" className="fill-slate-400 text-[11px] font-bold">
+                          {p.year}
+                        </text>
+                      ))}
+                    </>
+                  );
+                })()}
+              </svg>
+
+              <div className="mt-8">
+                <label className="text-[10px] uppercase font-black text-slate-400">
+                  Market Velocity
+                </label>
+                <input
+                  type="range"
+                  min="1"
+                  max="3.5"
+                  step="0.1"
+                  value={fundingVelocity}
+                  onChange={e => setFundingVelocity(+e.target.value)}
+                  className="w-full accent-emerald-600"
+                />
               </div>
             </section>
 
