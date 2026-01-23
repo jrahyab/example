@@ -30,13 +30,13 @@
 
     function App() {
 
-      /* ================= UNIT ECON INPUTS ================= */
+      /* ================= UNIT ECONOMICS ================= */
       const [inputs, setInputs] = useState({
         bankFee: 2500,
         uniFee: 1500,
+        monthlyPayment: 1200,
         serviceFee: 0.015,
         repaymentTerm: 120,
-        monthlyPayment: 1200,
         coca: 800
       });
 
@@ -47,56 +47,49 @@
 
       const ltvRatio = (ltv / inputs.coca).toFixed(1);
 
-      /* ================= DE FINANCIAL CANVAS ================= */
-      const [banksOnboarded, setBanksOnboarded] = useState(6);
-      const [fundingVelocity, setFundingVelocity] = useState(2.2);
-      const initialInvestment = 1200000;
-
-      const deUnit = {
-        avgBankFee: 250000,
-        studentFee: 1500,
-        studentsPerBank: 400,
-        opexBase: 600000
-      };
+      /* ================= UPDATED DE FINANCIAL MODEL ================= */
+      const years = [1, 2, 3, 4, 5];
+      const revenueData = [0.4, 1.5, 4.5, 8.0, 14.0];   // R$ Millions
+      const cashFlowData = [-1.2, -1.0, 0.5, 2.5, 5.0]; // R$ Millions
 
       const projections = useMemo(() => {
-        let data = [];
-        let runningCash = initialInvestment;
-
-        for (let year = 1; year <= 5; year++) {
-          const activeBanks = Math.max(
-            1,
-            Math.round((banksOnboarded / 5) * year * (fundingVelocity / 2.2))
-          );
-
-          const students = activeBanks * deUnit.studentsPerBank;
-          const revenue =
-            activeBanks * deUnit.avgBankFee +
-            students * deUnit.studentFee;
-
-          const costs = deUnit.opexBase * Math.pow(1.25, year - 1);
-          const cashFlow = revenue - costs;
-          runningCash += cashFlow;
-
-          data.push({
+        let cumulative = 0;
+        return years.map((year, i) => {
+          cumulative += cashFlowData[i];
+          return {
             year: `Year ${year}`,
-            revenue,
-            cashFlow,
-            cumCash: runningCash
-          });
-        }
-        return data;
-      }, [banksOnboarded, fundingVelocity]);
+            revenue: revenueData[i] * 1_000_000,
+            cashFlow: cashFlowData[i] * 1_000_000,
+            cumCash: cumulative * 1_000_000
+          };
+        });
+      }, []);
+
+      /* ================= CHART HELPERS ================= */
+      const chartHeight = 350;
+      const chartWidth = 800;
+      const padding = 60;
+
+      const allValues = projections.flatMap(d => [d.revenue, d.cashFlow, d.cumCash]);
+      const maxVal = Math.max(...allValues.map(Math.abs));
+
+      const getY = (val) =>
+        chartHeight * 0.5 - (val / maxVal) * (chartHeight * 0.4);
+
+      const getX = (i) =>
+        padding + (i * (chartWidth - 2 * padding)) / 4;
+
+      const getPath = (key) =>
+        projections.map((d, i) => `${getX(i)},${getY(d[key])}`).join(" ");
 
       useEffect(() => {
         lucide.createIcons();
       });
 
-      /* ================= RENDER ================= */
       return (
         <div className="font-sans text-slate-900 pb-32">
 
-          {/* HERO */}
+          {/* ================= HERO ================= */}
           <header className="bg-slate-900 text-white py-16 text-center">
             <div className="inline-block px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
               Capital-Light AI Marketplace
@@ -112,7 +105,7 @@
 
           <main className="max-w-6xl mx-auto -mt-12 px-4 space-y-20">
 
-            {/* BUILD CAPITAL */}
+            {/* ================= BUILD CAPITAL ================= */}
             <section className="bg-slate-900 text-white rounded-3xl p-10 shadow-xl">
               <h2 className="text-xl font-black text-center mb-8 uppercase">
                 Technology Build Capital
@@ -122,8 +115,8 @@
                   {[
                     ["Venture Capital", "ML, data, platform scale", "trending-up"],
                     ["Strategic Banks", "Pilots & innovation budgets", "landmark"],
-                    ["Impact Capital", "Education & inclusion", "hand-coins"],
-                    ["Grants", "Non-dilutive R&D funding", "shield-check"]
+                    ["Impact Capital", "Education & inclusion", "zap"],
+                    ["Grants", "Non-dilutive R&D funding", "check-circle"]
                   ].map(([t, d, i], idx) => (
                     <div key={idx} className="bg-slate-800 p-4 rounded-xl flex gap-4">
                       <Icon name={i} className="w-5 h-5 text-emerald-400" />
@@ -143,7 +136,7 @@
               </div>
             </section>
 
-            {/* CAPITAL FLOW */}
+            {/* ================= CAPITAL FLOW ================= */}
             <section className="bg-white rounded-3xl p-10 shadow-xl border">
               <h2 className="text-xl font-black text-center mb-10 uppercase">
                 Capital Flow — One Student Lifecycle
@@ -154,7 +147,7 @@
                   ["① Bank", "Pays tuition + R$2,500 tech fee", "landmark"],
                   ["② University", "Receives tuition + pays R$1,500 fee", "graduation-cap"],
                   ["③ Student", "Studies → repays loan", "users"],
-                  ["④ Bank", "Capital returns + interest", "repeat"]
+                  ["④ Bank", "Capital returns + interest", "arrow-right"]
                 ].map(([t, d, i], idx) => (
                   <div key={idx} className={`w-full max-w-xl p-6 rounded-xl flex justify-between items-center ${idx === 3 ? 'bg-slate-900 text-white border-emerald-500 border-4' : 'bg-slate-50 border'}`}>
                     <div>
@@ -165,13 +158,13 @@
                   </div>
                 ))}
                 <div className="text-xs text-slate-500 italic flex items-center gap-2">
-                  <Icon name="refresh-cw" className="w-4 h-4" />
+                  <Icon name="repeat" className="w-4 h-4" />
                   Lifecycle repeats at scale
                 </div>
               </div>
             </section>
 
-            {/* ECOSYSTEM */}
+            {/* ================= ECOSYSTEM ================= */}
             <section className="bg-white rounded-3xl p-10 shadow-xl border">
               <h2 className="text-xl font-black text-center mb-10 uppercase">
                 ML-Powered Ecosystem
@@ -202,7 +195,7 @@
               </div>
             </section>
 
-            {/* UNIT ECONOMICS */}
+            {/* ================= UNIT ECONOMICS ================= */}
             <section className="grid md:grid-cols-2 gap-8">
               <div className="bg-white p-8 rounded-3xl shadow border">
                 <h3 className="font-black mb-6 uppercase">Unit Economics</h3>
@@ -237,54 +230,27 @@
               </div>
             </section>
 
-            {/* DE FINANCIAL CANVAS */}
+            {/* ================= UPDATED DE FINANCIAL CANVAS ================= */}
             <section className="bg-white rounded-3xl p-10 shadow-xl border">
               <h2 className="text-xl font-black mb-6 uppercase">
-                Disciplined Entrepreneurship — Financial Canvas
+                Disciplined Entrepreneurship — Financial Canvas (R$ Millions)
               </h2>
 
-              <svg viewBox="0 0 700 300" className="w-full">
-                {(() => {
-                  const pad = 50;
-                  const h = 300;
-                  const w = 700;
-                  const vals = projections.flatMap(p => [p.revenue, p.cashFlow, p.cumCash]);
-                  const max = Math.max(...vals.map(Math.abs));
+              <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full">
+                <line x1={padding} y1={getY(0)} x2={chartWidth-padding} y2={getY(0)} stroke="#cbd5e1" strokeDasharray="6" />
+                <polyline fill="none" stroke="#10b981" strokeWidth="6" points={getPath("revenue")} />
+                <polyline fill="none" stroke="#f43f5e" strokeWidth="6" points={getPath("cashFlow")} />
+                <polyline fill="none" stroke="#9333ea" strokeWidth="8" points={getPath("cumCash")} />
 
-                  const X = i => pad + i * (w - pad * 2) / 4;
-                  const Y = v => h / 2 - (v / max) * h * 0.4;
-                  const path = k => projections.map((p, i) => `${X(i)},${Y(p[k])}`).join(" ");
-
-                  return (
-                    <>
-                      <line x1={pad} y1={Y(0)} x2={w - pad} y2={Y(0)} stroke="#e5e7eb" strokeDasharray="4" />
-                      <polyline fill="none" stroke="#10b981" strokeWidth="4" points={path("revenue")} />
-                      <polyline fill="none" stroke="#f43f5e" strokeWidth="4" points={path("cashFlow")} />
-                      <polyline fill="none" stroke="#9333ea" strokeWidth="5" points={path("cumCash")} />
-                      {projections.map((p, i) => (
-                        <text key={i} x={X(i)} y={h - 10} textAnchor="middle" className="fill-slate-400 text-[11px] font-bold">
-                          {p.year}
-                        </text>
-                      ))}
-                    </>
-                  );
-                })()}
+                {projections.map((p,i)=>(
+                  <g key={i}>
+                    <text x={getX(i)} y={chartHeight-10} textAnchor="middle" className="fill-slate-400 text-xs font-black italic">
+                      {p.year}
+                    </text>
+                    <circle cx={getX(i)} cy={getY(p.cumCash)} r="6" fill="#9333ea" stroke="white" strokeWidth="3"/>
+                  </g>
+                ))}
               </svg>
-
-              <div className="mt-8">
-                <label className="text-[10px] uppercase font-black text-slate-400">
-                  Market Velocity
-                </label>
-                <input
-                  type="range"
-                  min="1"
-                  max="3.5"
-                  step="0.1"
-                  value={fundingVelocity}
-                  onChange={e => setFundingVelocity(+e.target.value)}
-                  className="w-full accent-emerald-600"
-                />
-              </div>
             </section>
 
           </main>
