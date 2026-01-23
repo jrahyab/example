@@ -15,7 +15,7 @@
   <!-- Babel -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- Lucide Icons -->
+  <!-- Lucide -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
@@ -25,7 +25,7 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect } = React;
 
-    const Slider = ({ label, value, field, icon, setStudentData, studentData }) => (
+    const Slider = ({ label, value, field, icon, studentData, setStudentData }) => (
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
           <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -48,7 +48,7 @@
     );
 
     const App = () => {
-      const [activeTab, setActiveTab] = useState('demo');
+      const [activeTab, setActiveTab] = useState("demo");
       const [studentData, setStudentData] = useState({
         academicScore: 85,
         psychometricScore: 70,
@@ -57,28 +57,27 @@
       });
 
       const prediction = useMemo(() => {
-        const { academicScore, psychometricScore, marketDemand, institutionQuality } = studentData;
-        const rawScore =
-          academicScore * 0.4 +
-          psychometricScore * 0.25 +
-          marketDemand * 0.2 +
-          institutionQuality * 0.15;
+        const s =
+          studentData.academicScore * 0.4 +
+          studentData.psychometricScore * 0.25 +
+          studentData.marketDemand * 0.2 +
+          studentData.institutionQuality * 0.15;
 
         return {
-          score: Math.round(rawScore),
-          defaultRisk: Math.max(1.5, (100 - rawScore) * 0.12).toFixed(1),
-          salary: (rawScore * 180).toLocaleString('pt-BR'),
-          status: rawScore > 75 ? 'Approved' : rawScore > 60 ? 'Pending Review' : 'High Risk'
+          score: Math.round(s),
+          risk: Math.max(1.5, (100 - s) * 0.12).toFixed(1),
+          salary: (s * 180).toLocaleString("pt-BR"),
+          status: s > 75 ? "Approved" : s > 60 ? "Pending Review" : "High Risk"
         };
       }, [studentData]);
 
+      // 🔑 Re-render icons whenever tab changes
       useEffect(() => {
         lucide.createIcons();
-      });
+      }, [activeTab]);
 
       return (
-        <div className="min-h-screen p-6 font-sans text-slate-900 max-w-7xl mx-auto">
-          {/* HEADER */}
+        <div className="max-w-7xl mx-auto p-6">
           <header className="mb-10 border-b pb-8 flex justify-between items-center">
             <div>
               <h1 className="text-4xl font-black italic uppercase tracking-tighter">
@@ -91,21 +90,17 @@
 
             <div className="flex bg-slate-100 p-1.5 rounded-2xl">
               <button
-                onClick={() => setActiveTab('demo')}
+                onClick={() => setActiveTab("demo")}
                 className={`px-6 py-2 text-xs font-black uppercase rounded-xl ${
-                  activeTab === 'demo'
-                    ? 'bg-white shadow text-slate-900'
-                    : 'text-slate-400'
+                  activeTab === "demo" ? "bg-white shadow" : "text-slate-400"
                 }`}
               >
                 Interactive Demo
               </button>
               <button
-                onClick={() => setActiveTab('training')}
+                onClick={() => setActiveTab("training")}
                 className={`px-6 py-2 text-xs font-black uppercase rounded-xl ${
-                  activeTab === 'training'
-                    ? 'bg-white shadow text-slate-900'
-                    : 'text-slate-400'
+                  activeTab === "training" ? "bg-white shadow" : "text-slate-400"
                 }`}
               >
                 Training Process
@@ -113,122 +108,62 @@
             </div>
           </header>
 
-          {/* CONTENT */}
-          {activeTab === 'demo' ? (
+          {activeTab === "demo" && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-              {/* INPUTS */}
-              <div className="lg:col-span-5 bg-slate-50 p-8 rounded-[3rem] border shadow-inner">
-                <h2 className="text-xl font-black uppercase italic mb-8 flex items-center gap-3">
-                  <i data-lucide="sliders" className="w-6 h-6 text-emerald-500"></i>
+              <div className="lg:col-span-5 bg-slate-50 p-8 rounded-[3rem]">
+                <h2 className="font-black uppercase italic mb-6">
                   Scoring Inputs
                 </h2>
 
-                <Slider label="Academic Merit" field="academicScore" value={studentData.academicScore} icon="graduation-cap" setStudentData={setStudentData} studentData={studentData} />
-                <Slider label="Psychometric 'Grit' Index" field="psychometricScore" value={studentData.psychometricScore} icon="brain" setStudentData={setStudentData} studentData={studentData} />
-                <Slider label="Market Specialization ROI" field="marketDemand" value={studentData.marketDemand} icon="trending-up" setStudentData={setStudentData} studentData={studentData} />
-                <Slider label="Institutional Performance" field="institutionQuality" value={studentData.institutionQuality} icon="shield-check" setStudentData={setStudentData} studentData={studentData} />
+                <Slider label="Academic Merit" icon="graduation-cap" field="academicScore" value={studentData.academicScore} studentData={studentData} setStudentData={setStudentData} />
+                <Slider label="Psychometric 'Grit' Index" icon="brain" field="psychometricScore" value={studentData.psychometricScore} studentData={studentData} setStudentData={setStudentData} />
+                <Slider label="Market Specialization ROI" icon="trending-up" field="marketDemand" value={studentData.marketDemand} studentData={studentData} setStudentData={setStudentData} />
+                <Slider label="Institutional Performance" icon="shield-check" field="institutionQuality" value={studentData.institutionQuality} studentData={studentData} setStudentData={setStudentData} />
               </div>
 
-              {/* OUTPUT */}
-              <div className="lg:col-span-7">
-                <div className="bg-slate-900 text-white p-12 rounded-[4rem] border-b-[12px] border-emerald-500 relative">
-                  <i data-lucide="cpu" className="absolute top-10 right-10 w-40 h-40 opacity-5"></i>
+              <div className="lg:col-span-7 bg-slate-900 text-white p-12 rounded-[4rem] border-b-[12px] border-emerald-500">
+                <div className="text-xs uppercase text-emerald-400">Underwriting Score</div>
+                <div className="text-8xl font-black">{prediction.score}</div>
 
-                  <div className="relative z-10">
-                    <div className="flex justify-between mb-10">
-                      <div>
-                        <div className="text-xs font-black uppercase tracking-widest text-emerald-400">
-                          Underwriting Score
-                        </div>
-                        <div className="text-8xl font-black italic font-mono">
-                          {prediction.score}
-                        </div>
-                      </div>
-
-                      <div className="bg-white/10 px-6 py-4 rounded-3xl text-center">
-                        <div className="text-xs uppercase text-slate-400">Status</div>
-                        <div className="text-xl font-black italic text-emerald-400">
-                          {prediction.status}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-10 border-t border-white/10 pt-10">
-                      <div>
-                        <div className="text-xs uppercase text-slate-400">
-                          Default Risk Probability
-                        </div>
-                        <div className="text-4xl font-black font-mono">
-                          {prediction.defaultRisk}%
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-xs uppercase text-slate-400">
-                          Projected Year 1 Salary
-                        </div>
-                        <div className="text-2xl font-black text-emerald-400 italic">
-                          R$ {prediction.salary}
-                        </div>
-                      </div>
+                <div className="mt-8 grid grid-cols-2 gap-8">
+                  <div>
+                    <div className="text-xs text-slate-400">Default Risk</div>
+                    <div className="text-3xl font-black">{prediction.risk}%</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-400">Projected Salary</div>
+                    <div className="text-2xl font-black text-emerald-400">
+                      R$ {prediction.salary}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          ) : (
-            /* TRAINING LIFECYCLE */
-            <div className="bg-slate-900 text-white p-12 rounded-[4rem] shadow-2xl">
-              <div className="mb-10">
-                <h2 className="text-3xl font-black italic uppercase">
-                  The Training Lifecycle
-                </h2>
-                <p className="text-xs font-bold uppercase tracking-widest text-emerald-400 mt-2">
-                  From historical data to real-time decisions
-                </p>
-              </div>
+          )}
+
+          {activeTab === "training" && (
+            <div className="bg-slate-900 text-white p-12 rounded-[4rem]">
+              <h2 className="text-3xl font-black italic uppercase mb-2">
+                The Training Lifecycle
+              </h2>
+              <p className="text-xs uppercase tracking-widest text-emerald-400 mb-10">
+                From historical data to real-time decisions
+              </p>
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {[
-                  {
-                    phase: 'PHASE 01',
-                    icon: 'database',
-                    title: 'Synthesis',
-                    desc: 'Aggregating 10yr+ historical career data of 15k Brazilian physicians.'
-                  },
-                  {
-                    phase: 'PHASE 02',
-                    icon: 'bar-chart-3',
-                    title: 'Labeling',
-                    desc: "Correlating academic 'entry' features with 'exit' earning and repayment."
-                  },
-                  {
-                    phase: 'PHASE 03',
-                    icon: 'zap',
-                    title: 'Training',
-                    desc: 'XGBoost & Neural Net optimization focused on high-precision low-recall.'
-                  },
-                  {
-                    phase: 'PHASE 04',
-                    icon: 'shield-check',
-                    title: 'Validation',
-                    desc: 'Blind backtesting against current bank loan portfolios to verify lift.'
-                  }
-                ].map((item, i) => (
-                  <div key={i} className="bg-slate-800/80 p-8 rounded-3xl border border-white/5">
-                    <div className="flex items-center justify-between mb-6">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                        {item.phase}
-                      </span>
-                      <i data-lucide={item.icon} className="w-6 h-6 text-emerald-400"></i>
+                  ["PHASE 01", "database", "Synthesis", "Aggregating 10yr+ historical career data of 15k Brazilian physicians."],
+                  ["PHASE 02", "bar-chart-3", "Labeling", "Correlating academic entry features with exit earnings and repayment."],
+                  ["PHASE 03", "zap", "Training", "XGBoost & Neural Net optimization focused on high-precision low-recall."],
+                  ["PHASE 04", "shield-check", "Validation", "Blind backtesting against current bank loan portfolios to verify lift."]
+                ].map(([phase, icon, title, desc], i) => (
+                  <div key={i} className="bg-slate-800 p-8 rounded-3xl">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-[10px] uppercase tracking-widest text-slate-500">{phase}</span>
+                      <i data-lucide={icon} className="w-6 h-6 text-emerald-400"></i>
                     </div>
-
-                    <h3 className="text-lg font-black uppercase italic mb-3">
-                      {item.title}
-                    </h3>
-
-                    <p className="text-xs leading-relaxed text-slate-400">
-                      {item.desc}
-                    </p>
+                    <h3 className="font-black uppercase italic mb-2">{title}</h3>
+                    <p className="text-xs text-slate-400">{desc}</p>
                   </div>
                 ))}
               </div>
